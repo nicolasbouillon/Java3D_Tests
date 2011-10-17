@@ -63,14 +63,13 @@ public class TestAppletTriangle extends Applet {
      */
     public BranchGroup createSceneGraph() {
 
-        // Creates the big brother branch... which will contain all the things
-        // created in this method.
+        // objRoot will contain all the things to display
         BranchGroup objRoot = new BranchGroup();
 
         // Adds a ColorCubeTranslated with mouse control
         objRoot.addChild(TestAppletTriangle.createTriangleTranslated());
         
-        //Add light in the scene
+        // Add light in the scene
         Color3f light1Color = new Color3f(Color.white);
         Color3f light2Color = new Color3f(Color.white);
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 1000.0); 
@@ -117,16 +116,22 @@ public class TestAppletTriangle extends Applet {
         Point p1 = new Point(0, 0, 0);
         Point p2 = new Point(-1, 0, 0);
         Point p3 = new Point(0, -1, 0);
-        Edge e1 = new Edge(p1, p2);
-        Edge e2 = new Edge(p2, p3);
-        Edge e3 = new Edge(p1, p3);
         Vector3d normal = new Vector3d(0, 0, 1);
-        Triangle triangle = new Triangle(p1, p2, p3, e1, e2, e3, normal);
+        Triangle triangle1 = new Triangle(p1, p2, p3, normal);
 
-        TriangleViewer triangleViewer = new TriangleViewer(triangle);
-        triangleViewer.createShape3D();
+        TriangleViewer triangleViewer1 = new TriangleViewer(triangle1);
+        triangleViewer1.createShape3D();
+        transformGroup.addChild(triangleViewer1);
         
-        transformGroup.addChild(triangleViewer);
+        Point p1bis = new Point(0, 0, 0);
+        Point p2bis = new Point(1, 0, 0);
+        Point p3bis = new Point(0, 1, 0);
+        Triangle triangle2 = new Triangle(p1bis, p2bis, p3bis, normal);
+
+        TriangleViewer triangleViewer2 = new TriangleViewer(triangle2);
+        triangleViewer2.createShape3D();
+        transformGroup.addChild(triangleViewer2);
+        
 
         // Creates a bounding sphere for the mouse translate, mouse rotate and
         // mouse zoom transformation
