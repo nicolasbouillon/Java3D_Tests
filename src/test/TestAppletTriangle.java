@@ -16,7 +16,6 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import model.Edge;
 import model.Point;
 import model.Triangle;
 import view.TriangleViewer;
@@ -28,11 +27,14 @@ import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
+import control.PickingEnvironment;
+
 public class TestAppletTriangle extends Applet {
 
     private static final long serialVersionUID = 1L;
 
     SimpleUniverse simpleUniverse;
+    PickingEnvironment pick;
 
     public static void main(String[] args) {
         // if called as an application, a 500x500 window will be opened
@@ -45,17 +47,19 @@ public class TestAppletTriangle extends Applet {
 
     @Override
     public void init() {
+    	
         this.setLayout(new BorderLayout());
-
         Canvas3D c = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
         add("Center", c);
 
         // Setups the SimpleUniverse, attaches the Canvas3D
         this.simpleUniverse = new SimpleUniverse(c);
-
-        this.simpleUniverse.addBranchGraph(this.createSceneGraph());
-    }
-
+        BranchGroup group = this.createSceneGraph();
+        this.simpleUniverse.addBranchGraph(group);
+        
+        this.pick = new PickingEnvironment(c, group);
+    } 
+    
     /**
      * Creates a basic SceneGraph. Here we will create a basic SceneGraph with a
      * ColorCube object.
@@ -89,6 +93,8 @@ public class TestAppletTriangle extends Applet {
         return objRoot;
     }
 
+
+    
     public void translateCamera() {
         // Gets the ViewingPlatform of the SimpleUniverse
         ViewingPlatform camera = this.simpleUniverse.getViewingPlatform();
@@ -112,7 +118,7 @@ public class TestAppletTriangle extends Applet {
         // Creates a TransformGroup for the ColorCube called transformGroup
         TransformGroup transformGroup = new TransformGroup();
 
-        // Creates a Triangle object and adds it to the transform group
+        // Creates 2 Triangle objects and adds them to the transform group
         Point p1 = new Point(0, 0, 0);
         Point p2 = new Point(-1, 0, 0);
         Point p3 = new Point(0, -1, 0);
@@ -164,7 +170,7 @@ public class TestAppletTriangle extends Applet {
     @Override
     public void destroy() {
 
-        // this function will allow Java3D to clean up upon quiting
+        // this function will allow Java3D to clean up upon quitting
         this.simpleUniverse.removeAllLocales();
 
     }
