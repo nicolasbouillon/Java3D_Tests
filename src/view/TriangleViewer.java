@@ -81,7 +81,7 @@ public class TriangleViewer extends Shape3D {
         //Appearance to make the object visible if light
         Appearance app = new Appearance();
         Material mat = new Material(new Color3f(Color.red),new Color3f(Color.black),new Color3f(Color.red),new Color3f(Color.red),64);
-        mat.setColorTarget(1);
+        mat.setColorTarget(3);
         app.setMaterial(mat);
         this.setAppearance(app); 
         
