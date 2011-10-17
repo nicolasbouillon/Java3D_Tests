@@ -54,7 +54,7 @@ public class TestAppletTriangle extends Applet {
         Canvas3D c = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
         add("Center", c);
 
-        // Setups the SimpleUniverse, attachs the Canvas3D
+        // Setups the SimpleUniverse, attaches the Canvas3D
         this.simpleUniverse = new SimpleUniverse(c);
 
         this.simpleUniverse.addBranchGraph(this.createSceneGraph());

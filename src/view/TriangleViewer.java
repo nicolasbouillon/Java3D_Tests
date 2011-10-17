@@ -49,7 +49,6 @@ public class TriangleViewer extends Shape3D {
         triangle1.setCoordinate(2, new Point3d(this.triangle.getP3().getX(),
                 this.triangle.getP3().getY(), this.triangle.getP3().getZ()));
 
-
         triangle1.setNormal(0, convertNormal(triangle));
         triangle1.setNormal(1, convertNormal(triangle));
         triangle1.setNormal(2, convertNormal(triangle));
@@ -79,6 +78,7 @@ public class TriangleViewer extends Shape3D {
         this.addGeometry(triangle1);
         this.addGeometry(triangle2);
 
+        //Appearance to make the object visible if light
         Appearance app = new Appearance();
         Material mat = new Material(new Color3f(Color.red),new Color3f(Color.black),new Color3f(Color.red),new Color3f(Color.red),64);
         mat.setColorTarget(1);
