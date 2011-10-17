@@ -79,7 +79,7 @@ public class TestAppletTriangle extends Applet {
         
         //Add light in the scene
         Color3f light1Color = new Color3f(Color.white);
-        Color3f light2Color = new Color3f(0,0,0);
+        Color3f light2Color = new Color3f(Color.white);
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 1000.0); 
         Vector3f light1Direction = new Vector3f(1.0f, -1.0f, -1.0f);
         DirectionalLight light1 = new DirectionalLight(light1Color, light1Direction);
