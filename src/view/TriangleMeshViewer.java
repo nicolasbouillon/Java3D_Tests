@@ -4,7 +4,6 @@ import java.util.HashSet;
 
 import javax.media.j3d.Shape3D;
 
-import model.Edge;
 import model.Mesh;
 import model.Point;
 import model.Triangle;
@@ -35,7 +34,7 @@ public class TriangleMeshViewer extends HashSet<TriangleViewer> {
         HashSet<Shape3D> shapeSet = new HashSet<Shape3D>();
 
         for (TriangleViewer triangle : this) {
-            shapeSet.add(triangle.display());
+        	triangle.createShape3D();
         }
 
         return shapeSet;

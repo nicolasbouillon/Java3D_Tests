@@ -1,15 +1,10 @@
 package view;
 
 
-
-import javax.media.j3d.LineArray;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.TriangleArray;
-
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
-
-
 
 import model.Polyline;
 

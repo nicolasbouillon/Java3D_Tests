@@ -31,18 +31,12 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 
 public class PickTest extends Applet {
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-
-
-
-
-
-
+	
+	public static void main(String[] args) {
+		new MainFrame(new PickTest(), 500, 500);
+	}
 
 	public PickTest() {
 		setLayout(new BorderLayout());
@@ -97,9 +91,5 @@ public class PickTest extends Applet {
 		
 		 return objRoot;
 		 }
-	
-	public static void main(String[] args) {
-		new MainFrame(new PickTest(), 500, 500);
-	}
 
 }
