@@ -68,11 +68,11 @@ public class TestAppletTriangle extends Applet {
      */
     public BranchGroup createSceneGraph() {
 
-        // objRoot will contain all the things to display
+        // objRoot will contain all the things to display:
+    	//- transformGroup
         BranchGroup objRoot = new BranchGroup();
 
-        // Adds a ColorCubeTranslated with mouse control
-        objRoot.addChild(TestAppletTriangle.createTriangleTranslated());
+        TransformGroup transformGroup = TestAppletTriangle.createTriangleTranslated();
         
         // Add light in the scene
         Color3f light1Color = new Color3f(Color.white);
@@ -88,40 +88,37 @@ public class TestAppletTriangle extends Applet {
         objRoot.addChild(light1);
         objRoot.addChild(light2);
         
-        TransformGroup rotationGroup = new TransformGroup();
-        rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-        rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         
-        MovingEnvironment test = new MovingEnvironment(rotationGroup);
+        objRoot.addChild(transformGroup);
+        
+        MovingEnvironment test = new MovingEnvironment(transformGroup);
         test.setSchedulingBounds(bounds);
         objRoot.addChild(test);
         
-        
         // Translates camera
-        this.translateCamera();
+        this.translateCamera(0,0,5);
 
         objRoot.compile();
 
         return objRoot;
     }
 
-
     
-    public void translateCamera() {
+    public void translateCamera(float x, float y, float z) {
+    	
         // Gets the ViewingPlatform of the SimpleUniverse
         ViewingPlatform camera = this.simpleUniverse.getViewingPlatform();
-
         // Gets the TransformGroup associated
         TransformGroup cameraTransformGroup = camera.getMultiTransformGroup()
                 .getTransformGroup(0);
-
         // Creates a Transform3D for the ViewingPlatform
         Transform3D cameraTranslation = new Transform3D();
         // Gets the current 3d from the ViewingPlatform
         cameraTransformGroup.getTransform(cameraTranslation);
-
-        // Sets view to x=0, y=0, z= 5
-        cameraTranslation.setTranslation(new Vector3f(0.0f, 0.0f, 5.0f));
+        
+        cameraTranslation.setTranslation(new Vector3f(x, y, z));
         // Assigns Transform3D to ViewPlatform
         cameraTransformGroup.setTransform(cameraTranslation);
     }
@@ -155,15 +152,11 @@ public class TestAppletTriangle extends Applet {
         // mouse zoom transformation
         BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,0.0, 0.0), 10000.);
 
-        // Very important : authorize the scene graph to move during the execution of the program (as we want)
-        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-
         // Links the left button of the mouse with a rotation transformation
         MouseRotate mouseRotate = new MouseRotate();
         mouseRotate.setTransformGroup(transformGroup);
         mouseRotate.setSchedulingBounds(boundingSphere);
         transformGroup.addChild(mouseRotate);
-
 
         // Links the middle button of the mouse with a zoom transformation
         MouseZoom mouseZoom = new MouseZoom();
