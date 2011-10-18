@@ -27,6 +27,7 @@ import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
+import control.MovingEnvironment;
 import control.PickingEnvironment;
 
 public class TestAppletTriangle extends Applet {
@@ -87,6 +88,15 @@ public class TestAppletTriangle extends Applet {
         objRoot.addChild(light1);
         objRoot.addChild(light2);
         
+        TransformGroup rotationGroup = new TransformGroup();
+        rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        
+        MovingEnvironment test = new MovingEnvironment(rotationGroup);
+        test.setSchedulingBounds(bounds);
+        objRoot.addChild(test);
+        
+        
         // Translates camera
         this.translateCamera();
 
@@ -143,7 +153,7 @@ public class TestAppletTriangle extends Applet {
 
         // Creates a bounding sphere for the mouse translate, mouse rotate and
         // mouse zoom transformation
-        BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,0.0, 0.0), 1.);
+        BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,0.0, 0.0), 10000.);
 
         // Very important : authorize the scene graph to move during the execution of the program (as we want)
         transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
