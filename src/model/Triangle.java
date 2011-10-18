@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.vecmath.Vector3d;
 
+import model.Edge;
+
 /**
  * Implements a triangle, composed of three points, three edges, and one vector
  * as a normal.
@@ -66,6 +68,24 @@ public class Triangle {
         this.edges[2].addTriangle(this);
     }
 
+    public Triangle(final Point point0, final Point point1, final Point point2,
+            final Vector3d normalNew) {
+        
+        this.points[0] = point0;
+        this.points[1] = point1;
+        this.points[2] = point2;
+        this.normal.set(normalNew);
+        
+    	Edge edge1 = new Edge(point0, point1);
+        Edge edge2 = new Edge(point1, point2);
+        Edge edge3 = new Edge(point0, point2);
+        this.edges[0] = edge1;
+        this.edges[1] = edge2;
+        this.edges[2] = edge3;
+        this.edges[0].addTriangle(this);
+        this.edges[1].addTriangle(this);
+        this.edges[2].addTriangle(this);
+    }
     /**
      * Copy constructor of the triangle. Caution : do not use this constructor
      * to create double Triangle with equal values and different references !
