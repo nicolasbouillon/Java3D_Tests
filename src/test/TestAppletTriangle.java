@@ -77,8 +77,10 @@ public class TestAppletTriangle extends Applet {
         Color3f light1Color = new Color3f(Color.white);
         Color3f light2Color = new Color3f(Color.white);
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 1000.0); 
+        //Strong directional light
         Vector3f light1Direction = new Vector3f(1.0f, -1.0f, -1.0f);
         DirectionalLight light1 = new DirectionalLight(light1Color, light1Direction);
+        //Weak ambient light
         AmbientLight light2 = new AmbientLight(light2Color);
         light1.setInfluencingBounds(bounds);
         light2.setInfluencingBounds(bounds);
@@ -141,7 +143,7 @@ public class TestAppletTriangle extends Applet {
 
         // Creates a bounding sphere for the mouse translate, mouse rotate and
         // mouse zoom transformation
-        BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,0.0, 0.0), 10000.);
+        BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,0.0, 0.0), 1.);
 
         // Very important : authorize the scene graph to move during the execution of the program (as we want)
         transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -149,8 +151,9 @@ public class TestAppletTriangle extends Applet {
         // Links the left button of the mouse with a rotation transformation
         MouseRotate mouseRotate = new MouseRotate();
         mouseRotate.setTransformGroup(transformGroup);
-        transformGroup.addChild(mouseRotate);
         mouseRotate.setSchedulingBounds(boundingSphere);
+        transformGroup.addChild(mouseRotate);
+
 
         // Links the middle button of the mouse with a zoom transformation
         MouseZoom mouseZoom = new MouseZoom();

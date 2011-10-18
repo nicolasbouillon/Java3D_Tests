@@ -75,7 +75,7 @@ public class TriangleViewer extends Shape3D {
 
         //Appearance to make the object visible if light
         
-        this.ChangeColor();
+        this.changeColor();
 
         this.addGeometry(triangle1);
         this.addGeometry(triangle2);
@@ -97,7 +97,7 @@ public class TriangleViewer extends Shape3D {
     	
     }
     
-    public void ChangeColor(){
+    public void changeColor(){
         Appearance app = new Appearance();
         Material mat = null;
         if (selected){
