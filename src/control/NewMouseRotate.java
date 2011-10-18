@@ -15,6 +15,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import test.Angle;
+import view.TriangleViewer;
 
 import com.sun.j3d.utils.behaviors.mouse.MouseBehaviorCallback;
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
@@ -33,7 +34,29 @@ public class NewMouseRotate extends MouseRotate{
 	private Transform3D translation2 = new Transform3D();
 	private Point3d center = new Point3d(1,1,1);
     
-    public NewMouseRotate(TransformGroup TG1, TransformGroup TG2, TransformGroup TG3){
+    public Point3d getCenter() {
+		return center;
+	}
+
+	public void setCenter(Point3d center) {
+		this.center = center;
+	}
+
+	public void setCenter(TriangleViewer triangle) {
+		double x,y,z;
+		x = (triangle.getTriangle().getP1().getX()+ 
+				triangle.getTriangle().getP2().getX() +
+				triangle.getTriangle().getP3().getX())/3;
+		y = (triangle.getTriangle().getP1().getY()+ 
+				triangle.getTriangle().getP2().getY() +
+				triangle.getTriangle().getP3().getY())/3;
+		z = (triangle.getTriangle().getP1().getZ()+ 
+				triangle.getTriangle().getP2().getZ() +
+				triangle.getTriangle().getP3().getZ())/3;
+		setCenter(new Point3d(x,y,z));
+	}
+	
+	public NewMouseRotate(TransformGroup TG1, TransformGroup TG2, TransformGroup TG3){
     	super();
     	this.tg1=TG1;
     	this.tg2=TG2;
@@ -54,17 +77,15 @@ public class NewMouseRotate extends MouseRotate{
                     
             		Vector3d vector1 = new Vector3d();
             		Vector3d vector2 = new Vector3d();
-            		vector1.set(1, 1, 1);
-            		vector2.set(-1, -1, -1);
-
-            		
+            		vector1.set(this.center.getX(), this.center.getY(), this.center.getZ());
+            		vector2.set(-this.center.getX(), -this.center.getY(), -this.center.getZ());            		
             		
             		this.translation1.setTranslation(vector1);
             		this.translation2.setTranslation(vector2);
                     
-            		tg1.setTransform(translation1);
+            		//tg1.setTransform(translation1);
                     doNewProcess(evt);
-                    tg3.setTransform(translation2);
+                    //tg3.setTransform(translation2);
                 }
             }
 

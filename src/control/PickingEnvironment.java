@@ -7,6 +7,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
+import javax.vecmath.Point3d;
+
 import view.TriangleViewer;
 import com.sun.j3d.utils.picking.PickCanvas;
 import com.sun.j3d.utils.picking.PickResult;
@@ -14,6 +16,7 @@ import com.sun.j3d.utils.picking.PickResult;
 public class PickingEnvironment extends MouseAdapter {
 
 	PickCanvas pickCanvas;
+	NewMouseRotate mouseRotate = null;
 
 	public PickingEnvironment(Canvas3D c, BranchGroup group) {
 
@@ -30,6 +33,14 @@ public class PickingEnvironment extends MouseAdapter {
 
 	}
 
+	public NewMouseRotate getMouseRotate() {
+		return mouseRotate;
+	}
+
+	public void setMouseRotate(NewMouseRotate mouseRotate) {
+		this.mouseRotate = mouseRotate;
+	}
+
 	public void mouseClicked(MouseEvent e) {
 		
 		pickCanvas.setShapeLocation(e);
@@ -42,6 +53,7 @@ public class PickingEnvironment extends MouseAdapter {
 				System.out.println(s.getClass().getName());
 				s.selectOrUnselect();
 				s.changeColor();
+				mouseRotate.setCenter(s);
 			} else {
 				System.out.println("null");
 			}

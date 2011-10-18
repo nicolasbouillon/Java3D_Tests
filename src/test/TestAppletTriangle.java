@@ -36,7 +36,6 @@ public class TestAppletTriangle extends Applet {
     private static final long serialVersionUID = 1L;
 
     SimpleUniverse simpleUniverse;
-    PickingEnvironment pick;
 
     public static void main(String[] args) {
         // if called as an application, a 500x500 window will be opened
@@ -56,10 +55,11 @@ public class TestAppletTriangle extends Applet {
 
         // Setups the SimpleUniverse, attaches the Canvas3D
         this.simpleUniverse = new SimpleUniverse(c);
-        BranchGroup group = this.createSceneGraph();
+        BranchGroup group = this.createSceneGraph(c);
         this.simpleUniverse.addBranchGraph(group);
         
-        this.pick = new PickingEnvironment(c,group);
+        
+        
     } 
     
     /**
@@ -67,14 +67,16 @@ public class TestAppletTriangle extends Applet {
      * ColorCube object.
      * @return the branch group describing the scene graph
      */
-    public BranchGroup createSceneGraph() {
+    public BranchGroup createSceneGraph(Canvas3D c) {
 
         // objRoot will contain all the things to display:
     	//- transformGroup
-    	//-lights
+    	//- lights
         BranchGroup objRoot = new BranchGroup();
-
-        TransformGroup transformGroup = TestAppletTriangle.createTriangleTranslated();
+        PickingEnvironment pick = new PickingEnvironment(c,objRoot);
+        
+        TransformGroup transformGroup = TestAppletTriangle
+        			.createTransformGroup(pick);
         
         // Add light in the scene
         Color3f light1Color = new Color3f(Color.white);
@@ -122,7 +124,7 @@ public class TestAppletTriangle extends Applet {
         cameraTransformGroup.setTransform(cameraTranslation);
     }
 
-    public static TransformGroup createTriangleTranslated() {
+    public static TransformGroup createTransformGroup(PickingEnvironment pick) {
 
         // Creates a bounding sphere for the mouse translate, mouse rotate and
         // mouse zoom transformation
@@ -176,6 +178,7 @@ public class TestAppletTriangle extends Applet {
         		rotationGroup, translationGroup2);
         mouseRotate.setSchedulingBounds(boundingSphere);
         translationGroup2.addChild(mouseRotate);
+        pick.setMouseRotate(mouseRotate);
 
         // Links the middle button of the mouse with a zoom transformation
         MouseZoom mouseZoom = new MouseZoom();
