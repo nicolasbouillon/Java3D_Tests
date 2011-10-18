@@ -21,13 +21,14 @@ import model.Triangle;
 import view.TriangleViewer;
 
 import com.sun.j3d.utils.applet.MainFrame;
-import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
+import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
 import control.MovingEnvironment;
+import control.NewMouseRotate;
 import control.PickingEnvironment;
 
 public class TestAppletTriangle extends Applet {
@@ -58,7 +59,7 @@ public class TestAppletTriangle extends Applet {
         BranchGroup group = this.createSceneGraph();
         this.simpleUniverse.addBranchGraph(group);
         
-        this.pick = new PickingEnvironment(c, group);
+        this.pick = new PickingEnvironment(c,group);
     } 
     
     /**
@@ -70,6 +71,7 @@ public class TestAppletTriangle extends Applet {
 
         // objRoot will contain all the things to display:
     	//- transformGroup
+    	//-lights
         BranchGroup objRoot = new BranchGroup();
 
         TransformGroup transformGroup = TestAppletTriangle.createTriangleTranslated();
@@ -87,9 +89,6 @@ public class TestAppletTriangle extends Applet {
         light2.setInfluencingBounds(bounds);
         objRoot.addChild(light1);
         objRoot.addChild(light2);
-        
-        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         
         objRoot.addChild(transformGroup);
         
@@ -124,39 +123,59 @@ public class TestAppletTriangle extends Applet {
     }
 
     public static TransformGroup createTriangleTranslated() {
-        // Creates a TransformGroup for the ColorCube called transformGroup
-        TransformGroup transformGroup = new TransformGroup();
-
-        // Creates 2 Triangle objects and adds them to the transform group
-        Point p1 = new Point(0, 0, 0);
-        Point p2 = new Point(-1, 0, 0);
-        Point p3 = new Point(0, -1, 0);
-        Vector3d normal = new Vector3d(0, 0, 1);
-        Triangle triangle1 = new Triangle(p1, p2, p3, normal);
-
-        TriangleViewer triangleViewer1 = new TriangleViewer(triangle1);
-        triangleViewer1.createShape3D();
-        transformGroup.addChild(triangleViewer1);
-        
-        Point p1bis = new Point(0, 0, 0);
-        Point p2bis = new Point(1, 0, 0);
-        Point p3bis = new Point(0, 1, 0);
-        Triangle triangle2 = new Triangle(p1bis, p2bis, p3bis, normal);
-
-        TriangleViewer triangleViewer2 = new TriangleViewer(triangle2);
-        triangleViewer2.createShape3D();
-        transformGroup.addChild(triangleViewer2);
-        
 
         // Creates a bounding sphere for the mouse translate, mouse rotate and
         // mouse zoom transformation
         BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,0.0, 0.0), 10000.);
 
+        //transformGroup containing shapes, behaviors
+		TransformGroup transformGroup = new TransformGroup();
+		transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        
+		TransformGroup translationGroup1 = new TransformGroup();
+		translationGroup1.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		translationGroup1.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+		transformGroup.addChild(translationGroup1);
+		
+		TransformGroup rotationGroup = new TransformGroup();
+		rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+		translationGroup1.addChild(rotationGroup);
+		
+		TransformGroup translationGroup2 = new TransformGroup();
+		translationGroup2.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+		translationGroup2.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+		rotationGroup.addChild(translationGroup2);
+		
+        // Creates 2 Triangle objects and adds them to the transform group
+        Point p1 = new Point(1, 1, 1);
+        Point p2 = new Point(0, 1, 1);
+        Point p3 = new Point(1, 0, 1);
+        Vector3d normal = new Vector3d(0, 0, 1);
+        Triangle triangle1 = new Triangle(p1, p2, p3, normal);
+
+        TriangleViewer triangleViewer1 = new TriangleViewer(triangle1);
+        triangleViewer1.createShape3D();
+        translationGroup2.addChild(triangleViewer1);
+        
+        Point p1bis = new Point(1, 1, 1);
+        Point p2bis = new Point(2, 1, 1);
+        Point p3bis = new Point(1, 2, 1);
+        Triangle triangle2 = new Triangle(p1bis, p2bis, p3bis, normal);
+
+        TriangleViewer triangleViewer2 = new TriangleViewer(triangle2);
+        triangleViewer2.createShape3D();
+        translationGroup2.addChild(triangleViewer2);
+        
+        ColorCube cube = new ColorCube(0.2);
+        translationGroup2.addChild(cube);
+               
         // Links the left button of the mouse with a rotation transformation
-        MouseRotate mouseRotate = new MouseRotate();
-        mouseRotate.setTransformGroup(transformGroup);
+        NewMouseRotate mouseRotate = new NewMouseRotate(translationGroup1, 
+        		rotationGroup, translationGroup2);
         mouseRotate.setSchedulingBounds(boundingSphere);
-        transformGroup.addChild(mouseRotate);
+        translationGroup2.addChild(mouseRotate);
 
         // Links the middle button of the mouse with a zoom transformation
         MouseZoom mouseZoom = new MouseZoom();

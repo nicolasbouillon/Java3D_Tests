@@ -37,8 +37,7 @@ public class PickingEnvironment extends MouseAdapter {
 		if (result == null) {
 			System.out.println("Nothing picked");
 		} else {
-			TriangleViewer s = (TriangleViewer) result
-					.getNode(PickResult.SHAPE3D);
+			TriangleViewer s = (TriangleViewer) result.getNode(PickResult.SHAPE3D);
 			if (s != null) {
 				System.out.println(s.getClass().getName());
 				s.selectOrUnselect();
