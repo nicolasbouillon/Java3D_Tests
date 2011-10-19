@@ -60,7 +60,7 @@ public class TriangleViewer extends Shape3D {
         triangle1.setNormal(1, convertNormal(triangle));
         triangle1.setNormal(2, convertNormal(triangle));
         
-
+   
         TriangleArray triangle2 = new TriangleArray(3,
                 GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.NORMALS);
         triangle2.setCoordinate(0, new Point3d(this.triangle.getP2().getX(),
@@ -73,6 +73,10 @@ public class TriangleViewer extends Shape3D {
         triangle2.setNormal(1, convertOppositeNormal(triangle));
         triangle2.setNormal(2, convertOppositeNormal(triangle));
 
+        
+ 
+      
+        
         //Appearance to make the object visible if light
         
         this.changeColor();
