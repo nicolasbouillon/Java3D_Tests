@@ -78,6 +78,12 @@ public class TriangleViewer extends Shape3D {
       
         
         //Appearance to make the object visible if light
+//        triangle1.setColor(0, new Color3f(1,0,0));
+//        triangle1.setColor(1, new Color3f(1,0,0));
+//        triangle1.setColor(2, new Color3f(1,0,0));
+//        triangle2.setColor(0, new Color3f(1,0,0));
+//        triangle2.setColor(1, new Color3f(1,0,0));
+//        triangle2.setColor(2, new Color3f(1,0,0));
         
         this.changeColor();
 
