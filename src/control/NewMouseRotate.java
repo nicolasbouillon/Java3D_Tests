@@ -75,9 +75,20 @@ public class NewMouseRotate extends MouseRotate{
                 if (events.length > 0) {
                     evt = (MouseEvent) events[events.length - 1];
                     
+                    Point3d centerpoint=new Point3d();
+                    centerpoint.x=this.center.getX();
+                    centerpoint.y=this.center.getY();
+                    centerpoint.z=this.center.getZ();
+                    
+                    this.translation2.transform(centerpoint);
+                    currXform.transform(centerpoint);
+                    this.translation1.transform(centerpoint);
+   
+                    
             		Vector3d vector1 = new Vector3d();
             		Vector3d vector2 = new Vector3d();
-            		vector1.set(this.center.getX(), this.center.getY(), this.center.getZ());
+            		//vector1.set(this.center.getX(), this.center.getY(), this.center.getZ());
+            		vector1.set(centerpoint.x,centerpoint.y,centerpoint.z);
             		vector2.set(-this.center.getX(), -this.center.getY(), -this.center.getZ());            		
             		
             		this.translation1.setTranslation(vector1);
