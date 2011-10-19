@@ -83,9 +83,9 @@ public class NewMouseRotate extends MouseRotate{
             		this.translation1.setTranslation(vector1);
             		this.translation2.setTranslation(vector2);
                     
-            		//tg1.setTransform(translation1);
+            		tg1.setTransform(translation1);
                     doNewProcess(evt);
-                    //tg3.setTransform(translation2);
+                    tg3.setTransform(translation2);
                 }
             }
 
