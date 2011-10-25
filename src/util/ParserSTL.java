@@ -332,7 +332,7 @@ public class ParserSTL {
         int counterError = 0;
 
         //for (int i = 0; i < meshSize; i = i + 1) {
-        for (int i = 0; i < 200; i = i + 1) {
+        for (int i = 0; i < 2000; i = i + 1) {
             try {
                 // If a Triangle exists already, and if the
                 // Parser read another

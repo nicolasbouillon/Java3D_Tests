@@ -6,7 +6,6 @@ import java.util.Enumeration;
 
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.media.j3d.TriangleArray;
 import javax.media.j3d.WakeupCriterion;
 import javax.media.j3d.WakeupOnAWTEvent;
 import javax.media.j3d.WakeupOnBehaviorPost;
@@ -14,7 +13,6 @@ import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import test.Angle;
 import view.TriangleViewer;
 
 import com.sun.j3d.utils.behaviors.mouse.MouseBehaviorCallback;
