@@ -138,7 +138,7 @@ public abstract class Java3dApplet extends Applet {
         BranchGroup viewBranchGroup = createViewBranchGroup(
                 getViewTransformGroupArray(), vp);
 
-        createView(vp);
+        //createView(vp);
 
         Background background = createBackground();
 
