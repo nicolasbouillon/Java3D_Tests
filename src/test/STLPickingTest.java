@@ -52,11 +52,9 @@ import control.PickingEnvironment;
 public class STLPickingTest extends Java3dApplet implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	PickCanvas pickCanvas;
-
 	TriangleMeshViewer meshViewer;
-
 	SimpleUniverse simpleUniverse;
 
 	public STLPickingTest() {
@@ -202,8 +200,9 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 
 		// Translates camera
 		this.translateCamera(255, 91, 450);
+		pick.getMouseRotate().setCenter(new Point3d(255, 91, 450));
 
-		//objRoot.compile();
+		objRoot.compile();
 
 		// TransformGroup mouseGroup = createMouseBehaviorsGroup();
 		// BranchGroup sceneRoot = new BranchGroup();
@@ -379,14 +378,13 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		//
 	}
 
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		System.out.println("Current user.dir: "
 				+ System.getProperty("user.dir"));
 
 		STLPickingTest pickingTest = new STLPickingTest(args);
 
-		new MainFrame(pickingTest, 400, 400);
+		new MainFrame(pickingTest, 800, 700);
 	}
 
 	public void destroy() {
