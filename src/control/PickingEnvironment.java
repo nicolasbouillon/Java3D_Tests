@@ -14,6 +14,7 @@ import view.TriangleViewer;
 
 import com.sun.j3d.utils.picking.PickCanvas;
 import com.sun.j3d.utils.picking.PickResult;
+import com.sun.j3d.utils.picking.PickTool;
 
 public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 
@@ -30,7 +31,7 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 		});
 
 		pickCanvas = new PickCanvas(c, group);
-		pickCanvas.setMode(PickCanvas.BOUNDS);
+		pickCanvas.setMode(PickTool.GEOMETRY_INTERSECT_INFO);
 		c.addMouseListener(this);
 		c.addMouseMotionListener(this);
 
@@ -68,6 +69,11 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 			}
 	    }
 	}
+	
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		System.out.println("test3");
+	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
@@ -89,12 +95,6 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		System.out.println("test3");
 		
 	}
 
