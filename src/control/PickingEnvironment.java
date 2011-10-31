@@ -20,6 +20,9 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 
 	PickCanvas pickCanvas;
 	NewMouseRotate mouseRotate = null;
+	int xPressed;
+	int yPressed;
+	
 
 	public PickingEnvironment(Canvas3D c, BranchGroup group) {
 
@@ -71,8 +74,44 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 	}
 	
 	@Override
+	public void mousePressed(MouseEvent e) {
+		System.out.println("Mouse Pressed");
+		xPressed = e.getX();
+		yPressed = e.getY();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		int buttonDown = e.getButton();
+	    if (buttonDown == MouseEvent.BUTTON1) {
+			
+			for(int x=xPressed; x<e.getX(); x=x+5 ){
+				for(int y=yPressed; y<e.getY(); y=y+5){
+					pickCanvas.setShapeLocation(x, y);
+					PickResult result = pickCanvas.pickClosest();
+					if (result == null) {
+						System.out.println("Nothing picked");
+					} else {
+						TriangleViewer s = (TriangleViewer) result.getNode(PickResult.SHAPE3D);
+						if (s != null) {
+							System.out.println(s.getClass().getName());
+							s.select();
+							s.changeColor();
+							mouseRotate.setCenter(s);
+						} else {
+							System.out.println("null");
+						}
+					}		
+				}
+			}
+	    }
+	}
+	
+	
+	
+	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		System.out.println("test3");
+		//System.out.println("position is: " + arg0.getX() + "  " + arg0.getY());
 	}
 
 	@Override
@@ -87,16 +126,6 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 		
 	}
 
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {

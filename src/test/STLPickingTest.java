@@ -384,7 +384,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 
 		STLPickingTest pickingTest = new STLPickingTest(args);
 
-		new MainFrame(pickingTest, 800, 700);
+		new MainFrame(pickingTest, 500, 400);
 	}
 
 	public void destroy() {
