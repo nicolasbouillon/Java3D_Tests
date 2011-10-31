@@ -131,7 +131,7 @@ public class NewMouseRotate extends MouseRotate{
                 || ((wakeUp) && ((flags & MANUAL_WAKEUP) != 0))) {
             id = evt.getID();
             if ((id == MouseEvent.MOUSE_DRAGGED) && !evt.isMetaDown()
-                    && !evt.isAltDown()) {
+                    && !evt.isAltDown() && !evt.isShiftDown()) {
                 x = evt.getX();
                 y = evt.getY();
 
