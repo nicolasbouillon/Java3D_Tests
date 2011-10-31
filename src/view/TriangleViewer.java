@@ -44,6 +44,10 @@ public class TriangleViewer extends Shape3D {
     		selected=true;
     	}
     }
+    
+    public void select(){
+	    selected = true;
+    }
 
     public void createShape3D() {
 
