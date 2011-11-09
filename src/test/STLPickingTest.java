@@ -7,6 +7,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.BoundingSphere;
@@ -15,8 +16,10 @@ import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Node;
+import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.media.j3d.TriangleArray;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -58,7 +61,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	SimpleUniverse simpleUniverse;
 
 	public STLPickingTest() {
-		ParserSTL parser = new ParserSTL("test.stl");
+		ParserSTL parser = new ParserSTL("test1.stl");
 		try {
 			this.meshViewer = new TriangleMeshViewer(parser.read());
 		} catch (IOException e) {
@@ -69,7 +72,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	public STLPickingTest(String[] args) {
 		this.saveCommandLineArguments(args);
 		this.initJava3d();
-		ParserSTL parser = new ParserSTL("test.stl");
+		ParserSTL parser = new ParserSTL("test1.stl");
 		try {
 			this.meshViewer = new TriangleMeshViewer(parser.read());
 		} catch (IOException e) {
@@ -81,7 +84,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	public void start() {
 		if (this.pickCanvas == null)
 			this.initJava3d();
-		ParserSTL parser = new ParserSTL("test.stl");
+		ParserSTL parser = new ParserSTL("test1.stl");
 		try {
 			this.meshViewer = new TriangleMeshViewer(parser.read());
 		} catch (IOException e) {
@@ -184,13 +187,14 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		AmbientLight ambLight = new AmbientLight(true, new Color3f(1.0f, 1.0f,
 				1.0f));
 		ambLight.setInfluencingBounds(lightBounds);
-		objRoot.addChild(ambLight);
+		//objRoot.addChild(ambLight);
+		
 		// directional light
 		// DirectionalLight headLight = new DirectionalLight();
 		DirectionalLight headLight = new DirectionalLight(new Color3f(
 				Color.white), new Vector3f(1.0f, -1.0f, -1.0f));
 		headLight.setInfluencingBounds(lightBounds);
-		objRoot.addChild(headLight);
+		//objRoot.addChild(headLight);
 
 		objRoot.addChild(transformGroup);
 
@@ -199,9 +203,17 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		objRoot.addChild(test);
 
 		// Translates camera
-		this.translateCamera(255, 91, 450);
-		pick.getMouseRotate().setCenter(new Point3d(255, 91, 450));
-
+		
+//		this.translateCamera(-255, -18, 390);
+//		pick.getMouseRotate().setCenter(new Point3d(-255, -18, 390));
+		/////////////////////////////
+		this.translateCamera((float)meshViewer.getCentroid().getX(), (float)meshViewer.getCentroid().getY(), (float)meshViewer.getCentroid().getZ()+20);
+		Point3d orientPoint=new Point3d();
+		orientPoint.setX(meshViewer.getCentroid().getX());
+		orientPoint.setY(meshViewer.getCentroid().getY());
+		orientPoint.setZ(meshViewer.getCentroid().getZ());
+		pick.getMouseRotate().setCenter(orientPoint);
+		/////////////////////////////
 		objRoot.compile();
 
 		// TransformGroup mouseGroup = createMouseBehaviorsGroup();
@@ -266,14 +278,27 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		TriangleViewer triangleViewer2 = new TriangleViewer(triangle2);
 		triangleViewer2.createShape3D();
 		translationGroup2.addChild(triangleViewer2);
-		// ///////////////////
+		/////////////////////////////////////Test pour ajouter tous les triangles dans un seul Shape
 		BranchGroup sceneRoot=new BranchGroup();
-		meshViewer.createTriangleShapes();
-		for (TriangleViewer shape : meshViewer) {
-			sceneRoot.addChild(shape);
-		}
-		translationGroup2.addChild(sceneRoot);
+		Shape3D shape=new Shape3D();
+		ArrayList<TriangleArray> TriangleList=meshViewer.createTriangleArray();
 		
+		for(int i=0;i<TriangleList.size();i++){
+			shape.addGeometry(TriangleList.get(i));
+		}
+		
+		sceneRoot.addChild(shape);
+		translationGroup2.addChild(sceneRoot);
+		/////////////////////////////////////
+		
+		// ///////////////////
+//		BranchGroup sceneRoot=new BranchGroup();
+//		meshViewer.createTriangleShapes();
+//		for (TriangleViewer shape : meshViewer) {
+//			sceneRoot.addChild(shape);
+//		}
+//		translationGroup2.addChild(sceneRoot);
+		//////////////////////
 
 		// Links the left button of the mouse with a rotation transformation
 		NewMouseRotate mouseRotate = new NewMouseRotate(translationGroup1,

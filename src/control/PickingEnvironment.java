@@ -6,9 +6,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
+
+import model.Triangle;
 
 import view.TriangleViewer;
 
@@ -54,7 +57,7 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 		int buttonDown = e.getButton();
 		 
 	    if (buttonDown == MouseEvent.BUTTON1) {
-	           // Bouton GAUCHE enfoncé
+	           // Bouton GAUCHE enfoncï¿½
 			pickCanvas.setShapeLocation(e);
 			PickResult result = pickCanvas.pickClosest();
 			if (result == null) {
@@ -63,6 +66,14 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 				TriangleViewer s = (TriangleViewer) result.getNode(PickResult.SHAPE3D);
 				if (s != null) {
 					System.out.println(s.getClass().getName());
+					//////////////////////
+//					for(int i=0;i<s.getTriangle().getNumNeighbours();i++){
+//						List<Triangle> neighbour=s.getTriangle().getNeighbours();
+//						System.out.println(neighbour.get(i).getP1().getX());
+//						System.out.println(neighbour.get(i).getP1().getY());
+//						System.out.println(neighbour.get(i).getP1().getZ());
+//					}
+					//////////////////////
 					s.selectOrUnselect();
 					s.changeColor();
 					mouseRotate.setCenter(s);
@@ -85,8 +96,8 @@ public class PickingEnvironment implements MouseListener,MouseMotionListener  {
 		int buttonDown = e.getButton();
 	    if (buttonDown == MouseEvent.BUTTON1) {
 			
-			for(int x=xPressed; x<e.getX(); x=x+5 ){
-				for(int y=yPressed; y<e.getY(); y=y+5){
+			for(int x=xPressed; x<e.getX(); x=x+2 ){
+				for(int y=yPressed; y<e.getY(); y=y+2){
 					pickCanvas.setShapeLocation(x, y);
 					PickResult result = pickCanvas.pickClosest();
 					if (result == null) {

@@ -1,8 +1,11 @@
 package view;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.media.j3d.Shape3D;
+import javax.media.j3d.TriangleArray;
 
 import model.Mesh;
 import model.Point;
@@ -39,4 +42,15 @@ public class TriangleMeshViewer extends HashSet<TriangleViewer> {
 
         return shapeSet;
     }
+    
+   ////////////Test pour ajouter tous les triangles dans un seul Shape
+   public ArrayList<TriangleArray>  createTriangleArray(){
+	   ArrayList<TriangleArray> triangleList=new ArrayList<TriangleArray>();
+	   for(TriangleViewer triangle : this){
+		   triangleList.add(triangle.createTriangle1());
+		   triangleList.add(triangle.createTriangle2());   
+	   }
+	   return triangleList;
+   }
+   //////////////////////
 }
