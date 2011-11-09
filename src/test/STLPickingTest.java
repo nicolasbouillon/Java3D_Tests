@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.BoundingSphere;
 
+import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.Material;
 import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
@@ -187,14 +189,14 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		AmbientLight ambLight = new AmbientLight(true, new Color3f(1.0f, 1.0f,
 				1.0f));
 		ambLight.setInfluencingBounds(lightBounds);
-		//objRoot.addChild(ambLight);
+		objRoot.addChild(ambLight);
 		
 		// directional light
 		// DirectionalLight headLight = new DirectionalLight();
 		DirectionalLight headLight = new DirectionalLight(new Color3f(
 				Color.white), new Vector3f(1.0f, -1.0f, -1.0f));
 		headLight.setInfluencingBounds(lightBounds);
-		//objRoot.addChild(headLight);
+		objRoot.addChild(headLight);
 
 		objRoot.addChild(transformGroup);
 
@@ -279,17 +281,36 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		triangleViewer2.createShape3D();
 		translationGroup2.addChild(triangleViewer2);
 		/////////////////////////////////////Test pour ajouter tous les triangles dans un seul Shape
+//		BranchGroup sceneRoot=new BranchGroup();
+//		Shape3D shape=new Shape3D();
+//		ArrayList<TriangleArray> TriangleList=meshViewer.createTriangleArray();
+//		
+//		for(int i=0;i<TriangleList.size();i++){
+//			shape.addGeometry(TriangleList.get(i));
+//		}
+//		
+//		sceneRoot.addChild(shape);
+//		translationGroup2.addChild(sceneRoot);
+		/////////////////////////////////////
+		
+		////////////////////////////////////test pour augmenter la capacite d'affichage
 		BranchGroup sceneRoot=new BranchGroup();
 		Shape3D shape=new Shape3D();
-		ArrayList<TriangleArray> TriangleList=meshViewer.createTriangleArray();
+		shape.addGeometry(meshViewer.createTriangle1());
+		//shape.addGeometry(meshViewer.createTriangle2());
 		
-		for(int i=0;i<TriangleList.size();i++){
-			shape.addGeometry(TriangleList.get(i));
-		}
-		
+		 Appearance app = new Appearance();
+	        Material mat = null;
+	      
+	        	mat = new Material(new Color3f(0,0,0.2f),new Color3f(0,0,0),new Color3f(Color.blue),new Color3f(Color.green),64);
+	        
+	        mat.setColorTarget(3);
+	        app.setMaterial(mat);
+	        shape.setAppearance(app);
 		sceneRoot.addChild(shape);
 		translationGroup2.addChild(sceneRoot);
-		/////////////////////////////////////
+		
+		///////////////////////////////////
 		
 		// ///////////////////
 //		BranchGroup sceneRoot=new BranchGroup();

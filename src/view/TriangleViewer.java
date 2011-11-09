@@ -16,11 +16,38 @@ public class TriangleViewer extends Shape3D {
 
     private Triangle triangle;
     private boolean selected;
-
+    ////
+//    private double []coordonnes1=new double[3];
+//    private double []coordonnes2=new double[3];
+//    private double []coordonnes3=new double[3];
+//    
+//////
     public TriangleViewer(Triangle tri) {
         this.triangle = tri;
+        ////
+//        coordonnes1[0]=tri.getP1().getX();
+//        coordonnes1[1]=tri.getP1().getY();
+//        coordonnes1[2]=tri.getP1().getZ();
+//        coordonnes2[0]=tri.getP2().getX();
+//        coordonnes2[1]=tri.getP2().getY();
+//        coordonnes2[1]=tri.getP2().getZ();
+//        coordonnes3[0]=tri.getP3().getX();
+//        coordonnes3[1]=tri.getP3().getY();
+//        coordonnes3[2]=tri.getP3().getZ();
+        ////
     }
 
+    ///
+//    public double[] getP1(){
+//    	return coordonnes1;
+//    }
+//    public double[] getP2(){
+//    	return coordonnes2;
+//    }
+//    public double[] getP3(){
+//    	return coordonnes3;
+//    }
+    ///
     public Triangle getTriangle() {
         return this.triangle;
     }
@@ -112,13 +139,13 @@ public class TriangleViewer extends Shape3D {
          triangle1.setNormal(0, convertNormal(triangle));
          triangle1.setNormal(1, convertNormal(triangle));
          triangle1.setNormal(2, convertNormal(triangle));
-  
+         
     
-        
+        Color3f color1=new Color3f(1,0,1);
       
-             triangle1.setColor(0, new Color3f(1, 0, 1));
-             triangle1.setColor(1, new Color3f(1, 0, 1));
-             triangle1.setColor(2, new Color3f(1, 0, 1));
+             triangle1.setColor(0, color1);
+             triangle1.setColor(1, color1);
+             triangle1.setColor(2, color1);
        
         
          return triangle1;
@@ -130,33 +157,30 @@ public class TriangleViewer extends Shape3D {
     
          TriangleArray triangle2 = new TriangleArray(3,
                  GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.NORMALS);
+         
          triangle2.setCoordinate(0, new Point3d(this.triangle.getP2().getX(),
                  this.triangle.getP2().getY(), this.triangle.getP2().getZ()));
          triangle2.setCoordinate(1, new Point3d(this.triangle.getP1().getX(),
                  this.triangle.getP1().getY(), this.triangle.getP1().getZ()));
          triangle2.setCoordinate(2, new Point3d(this.triangle.getP3().getX(),
-                 this.triangle.getP3().getY(), this.triangle.getP3().getZ()));        
+                 this.triangle.getP3().getY(), this.triangle.getP3().getZ()));   
+         
+         
          triangle2.setNormal(0, convertOppositeNormal(triangle));
          triangle2.setNormal(1, convertOppositeNormal(triangle));
          triangle2.setNormal(2, convertOppositeNormal(triangle));
      
-     
-             triangle2.setColor(0, new Color3f(1, 0, 1));
-             triangle2.setColor(1, new Color3f(1, 0, 1));
-             triangle2.setColor(2, new Color3f(1, 0, 1));
-       
-         
-  
-    
-
-         
-         
+         Color3f color2=new Color3f(1,0,1);
+             triangle2.setColor(0, color2);
+             triangle2.setColor(1, color2);
+             triangle2.setColor(2, color2);
 
      return triangle2;
        
 
    }
     ////////////////////////////////////
+  
     public Vector3f convertNormal(Triangle triangle){
     	Vector3f normalFloat = new Vector3f((float) triangle.getNormal().getX(),
     			(float) triangle.getNormal().getY(),(float) triangle.getNormal().getZ());
