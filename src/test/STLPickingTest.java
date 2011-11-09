@@ -118,6 +118,8 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	public void init() {
 		this.setLayout(new BorderLayout());
 		Canvas3D c = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
+		//c.getView().setBackClipDistance(1000);
+		
 		add("Center", c);
 //////////////////////
 		doLayout();
@@ -132,6 +134,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		////////////////////////
 		// Setups the SimpleUniverse, attaches the Canvas3D
 		this.simpleUniverse = new SimpleUniverse(c);
+		c.getView().setBackClipDistance(1000);
 		BranchGroup group = this.createSceneBranchGroup(c);
 		this.simpleUniverse.addBranchGraph(group);
 
@@ -183,7 +186,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		// light bound
 		// Bounds lightBounds = getApplicationBounds();
 		BoundingSphere lightBounds = new BoundingSphere(new Point3d(0.0, 0.0,
-				0.0), 1000.0);
+				0.0), 10000.0);
 
 		// Ambient light
 		AmbientLight ambLight = new AmbientLight(true, new Color3f(1.0f, 1.0f,
@@ -238,7 +241,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	private static TransformGroup createTransformGroup(PickingEnvironment pick,
 			TriangleMeshViewer meshViewer) {
 		BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,
-				0.0, 0.0), 1000);
+				0.0, 0.0), 10000);
 
 		TransformGroup transformGroup = new TransformGroup();
 		transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -352,6 +355,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		cameraTransformGroup.getTransform(cameraTranslation);
 		cameraTranslation.setTranslation(new Vector3f(x, y, z));
 		cameraTransformGroup.setTransform(cameraTranslation);
+	    
 	}
 
 	// Juste du contrôle souris...
