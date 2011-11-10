@@ -116,7 +116,7 @@ public class TriangleViewer extends Shape3D {
         triangle2.setColor(0, new Color3f(1,0,0));
         triangle2.setColor(1, new Color3f(1,0,0));
         triangle2.setColor(2, new Color3f(1,0,0));
-        
+
         //this.changeColor();
 
         this.addGeometry(triangle1);
@@ -141,11 +141,11 @@ public class TriangleViewer extends Shape3D {
          triangle1.setNormal(2, convertNormal(triangle));
          
     
-        Color3f color1=new Color3f(1,0,1);
-      
-             triangle1.setColor(0, color1);
-             triangle1.setColor(1, color1);
-             triangle1.setColor(2, color1);
+//        Color3f color1=new Color3f(1,0,1);
+//      
+//             triangle1.setColor(0, color1);
+//             triangle1.setColor(1, color1);
+//             triangle1.setColor(2, color1);
        
         
          return triangle1;
@@ -169,11 +169,12 @@ public class TriangleViewer extends Shape3D {
          triangle2.setNormal(0, convertOppositeNormal(triangle));
          triangle2.setNormal(1, convertOppositeNormal(triangle));
          triangle2.setNormal(2, convertOppositeNormal(triangle));
+        
      
-         Color3f color2=new Color3f(1,0,1);
-             triangle2.setColor(0, color2);
-             triangle2.setColor(1, color2);
-             triangle2.setColor(2, color2);
+//         Color3f color2=new Color3f(1,0,1);
+//             triangle2.setColor(0, color2);
+//             triangle2.setColor(1, color2);
+//             triangle2.setColor(2, color2);
 
      return triangle2;
        

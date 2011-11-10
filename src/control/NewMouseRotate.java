@@ -54,6 +54,15 @@ public class NewMouseRotate extends MouseRotate{
 		setCenter(new Point3d(x,y,z));
 	}
 	
+	public void setCenter(Point3d P1, Point3d P2, Point3d P3){
+		double x,y,z;
+		x=(P1.x+P2.x+P3.x)/3;
+		y=(P1.y+P2.y+P3.y)/3;
+		z=(P1.z+P2.z+P3.z)/3;
+		setCenter(new Point3d(x,y,z));
+	}
+	
+	
 	public NewMouseRotate(TransformGroup TG1, TransformGroup TG2, TransformGroup TG3){
     	super();
     	this.tg1=TG1;

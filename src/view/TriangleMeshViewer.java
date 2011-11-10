@@ -17,7 +17,7 @@ import model.Mesh;
 import model.Point;
 import model.Triangle;
 
-public class TriangleMeshViewer extends HashSet<TriangleViewer> {
+public  class TriangleMeshViewer extends HashSet<TriangleViewer> {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,7 +64,7 @@ public class TriangleMeshViewer extends HashSet<TriangleViewer> {
    public TriangleArray createTriangle1(){
 	   TriangleArray triangle1=new TriangleArray(this.size()*3*2,GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.NORMALS);
 	   int i=0;
-	   Color3f color1=new Color3f(1,0,1);
+	  
 	   for(TriangleViewer triangle :this){
 		  
 //		   triangle1.setCoordinate(i,  triangle.getP1());
@@ -139,34 +139,34 @@ public class TriangleMeshViewer extends HashSet<TriangleViewer> {
 //	   return triangle1;
 //   }
    
-   public TriangleArray createTriangle2(){
-	   TriangleArray triangle2=new TriangleArray(this.size()*3,GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.NORMALS);
-	   int a=this.size();
-	   int i=0;
-	   Color3f color2=new Color3f(1,0,1);
-	   for(TriangleViewer triangle :this){
-		  
-
-
-			   triangle2.setCoordinate(i,   new Point3d(triangle.getTriangle().getP2().getX(),
-					   triangle.getTriangle().getP2().getY(), triangle.getTriangle().getP2().getZ()));
-			   triangle2.setCoordinate(i+1, new Point3d(triangle.getTriangle().getP1().getX(),
-					   triangle.getTriangle().getP1().getY(), triangle.getTriangle().getP1().getZ()));
-			   triangle2.setCoordinate(i+2, new Point3d(triangle.getTriangle().getP3().getX(),
-					   triangle.getTriangle().getP3().getY(), triangle.getTriangle().getP3().getZ()));
-			   
-			   triangle2.setNormal(i,   triangle.convertOppositeNormal(triangle.getTriangle()));
-			   triangle2.setNormal(i+1, triangle.convertOppositeNormal(triangle.getTriangle()));
-			   triangle2.setNormal(i+2, triangle.convertOppositeNormal(triangle.getTriangle()));
-			   
-			   triangle2.setColor(i, color2);
-	           triangle2.setColor(i+1, color2);
-	           triangle2.setColor(i+2, color2);
-			   
-			   i=i+3;
-   
-	   }
-	   return triangle2;
-   }
+//   public TriangleArray createTriangle2(){
+//	   TriangleArray triangle2=new TriangleArray(this.size()*3,GeometryArray.COORDINATES | GeometryArray.COLOR_3 | GeometryArray.NORMALS);
+//	   int a=this.size();
+//	   int i=0;
+//	   Color3f color2=new Color3f(1,0,1);
+//	   for(TriangleViewer triangle :this){
+//		  
+//
+//
+//			   triangle2.setCoordinate(i,   new Point3d(triangle.getTriangle().getP2().getX(),
+//					   triangle.getTriangle().getP2().getY(), triangle.getTriangle().getP2().getZ()));
+//			   triangle2.setCoordinate(i+1, new Point3d(triangle.getTriangle().getP1().getX(),
+//					   triangle.getTriangle().getP1().getY(), triangle.getTriangle().getP1().getZ()));
+//			   triangle2.setCoordinate(i+2, new Point3d(triangle.getTriangle().getP3().getX(),
+//					   triangle.getTriangle().getP3().getY(), triangle.getTriangle().getP3().getZ()));
+//			   
+//			   triangle2.setNormal(i,   triangle.convertOppositeNormal(triangle.getTriangle()));
+//			   triangle2.setNormal(i+1, triangle.convertOppositeNormal(triangle.getTriangle()));
+//			   triangle2.setNormal(i+2, triangle.convertOppositeNormal(triangle.getTriangle()));
+//			   
+//			   triangle2.setColor(i, color2);
+//	           triangle2.setColor(i+1, color2);
+//	           triangle2.setColor(i+2, color2);
+//			   
+//			   i=i+3;
+//   
+//	   }
+//	   return triangle2;
+//   }
    /////////////////////
 }

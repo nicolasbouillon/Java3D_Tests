@@ -3,16 +3,14 @@ package test;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.media.j3d.AmbientLight;
-import javax.media.j3d.BoundingSphere;
-
 import javax.media.j3d.Appearance;
+import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.DirectionalLight;
@@ -29,9 +27,7 @@ import javax.vecmath.Vector3f;
 
 import model.Point;
 import model.Triangle;
-
 import util.ParserSTL;
-
 import view.TriangleMeshViewer;
 import view.TriangleViewer;
 
@@ -39,6 +35,7 @@ import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
 import com.sun.j3d.utils.picking.PickCanvas;
+import com.sun.j3d.utils.picking.PickIntersection;
 import com.sun.j3d.utils.picking.PickResult;
 import com.sun.j3d.utils.picking.PickTool;
 import com.sun.j3d.utils.universe.SimpleUniverse;
@@ -118,7 +115,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	public void init() {
 		this.setLayout(new BorderLayout());
 		Canvas3D c = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
-		//c.getView().setBackClipDistance(1000);
+		
 		
 		add("Center", c);
 //////////////////////
@@ -284,24 +281,13 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		triangleViewer2.createShape3D();
 		translationGroup2.addChild(triangleViewer2);
 		/////////////////////////////////////Test pour ajouter tous les triangles dans un seul Shape
-//		BranchGroup sceneRoot=new BranchGroup();
-//		Shape3D shape=new Shape3D();
-//		ArrayList<TriangleArray> TriangleList=meshViewer.createTriangleArray();
-//		
-//		for(int i=0;i<TriangleList.size();i++){
-//			shape.addGeometry(TriangleList.get(i));
-//		}
-//		
-//		sceneRoot.addChild(shape);
-//		translationGroup2.addChild(sceneRoot);
-		/////////////////////////////////////
-		
-		////////////////////////////////////test pour augmenter la capacite d'affichage
 		BranchGroup sceneRoot=new BranchGroup();
 		Shape3D shape=new Shape3D();
-		shape.addGeometry(meshViewer.createTriangle1());
-		//shape.addGeometry(meshViewer.createTriangle2());
+		ArrayList<TriangleArray> TriangleList=meshViewer.createTriangleArray();
 		
+		for(int i=0;i<TriangleList.size();i++){
+			shape.addGeometry(TriangleList.get(i));
+		}
 		 Appearance app = new Appearance();
 	        Material mat = null;
 	      
@@ -312,6 +298,25 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	        shape.setAppearance(app);
 		sceneRoot.addChild(shape);
 		translationGroup2.addChild(sceneRoot);
+		
+		/////////////////////////////////////
+		
+		////////////////////////////////////test pour augmenter la capacite d'affichage
+//		BranchGroup sceneRoot=new BranchGroup();
+//		Shape3D shape=new Shape3D();
+//		shape.addGeometry(meshViewer.createTriangle1());
+//		//shape.addGeometry(meshViewer.createTriangle2());
+//	
+//		 Appearance app = new Appearance();
+//	        Material mat = null;
+//	      
+//	        	mat = new Material(new Color3f(0,0,0.2f),new Color3f(0,0,0),new Color3f(Color.blue),new Color3f(Color.green),64);
+//	        
+//	        mat.setColorTarget(3);
+//	        app.setMaterial(mat);
+//	        shape.setAppearance(app);
+//		sceneRoot.addChild(shape);
+//		translationGroup2.addChild(sceneRoot);
 		
 		///////////////////////////////////
 		
@@ -388,6 +393,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	// }
 
 	@Override
+
 	public void mouseClicked(MouseEvent e) {
 		System.out.println("*** MouseClick ***");
 
