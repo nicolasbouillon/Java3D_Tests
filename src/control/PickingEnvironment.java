@@ -63,17 +63,7 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
             } else {
                 TriangleArrayChild ta = (TriangleArrayChild) result
                         .getGeometryArray();
-                System.out.println(ta.toString());
-                // TriangleViewer s = (TriangleViewer) result
-                // .getNode(PickResult.SHAPE3D);
-                // if (s != null) {
-                // System.out.println(s.getClass().getName());
-                // s.selectOrUnselect();
-                // s.changeColor();
-                // this.mouseRotate.setCenter(s);
-                // } else {
-                // System.out.println("null");
-                // }
+                System.out.println(ta.triangle);
             }
         }
     }
