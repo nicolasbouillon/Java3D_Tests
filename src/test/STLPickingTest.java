@@ -3,16 +3,13 @@ package test;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.media.j3d.AmbientLight;
-import javax.media.j3d.BoundingSphere;
-
 import javax.media.j3d.Appearance;
+import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.DirectionalLight;
@@ -21,17 +18,12 @@ import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.media.j3d.TriangleArray;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import model.Point;
-import model.Triangle;
-
 import util.ParserSTL;
-
 import view.TriangleMeshViewer;
 import view.TriangleViewer;
 
@@ -56,389 +48,251 @@ import control.PickingEnvironment;
  */
 public class STLPickingTest extends Java3dApplet implements MouseListener {
 
-	private static final long serialVersionUID = 1L;
-	
-	PickCanvas pickCanvas;
-	TriangleMeshViewer meshViewer;
-	SimpleUniverse simpleUniverse;
+    private static final long serialVersionUID = 1L;
 
-	public STLPickingTest() {
-		ParserSTL parser = new ParserSTL("test1.stl");
-		try {
-			this.meshViewer = new TriangleMeshViewer(parser.read());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    PickCanvas pickCanvas;
+    TriangleMeshViewer meshViewer;
+    SimpleUniverse simpleUniverse;
 
-	public STLPickingTest(String[] args) {
-		this.saveCommandLineArguments(args);
-		this.initJava3d();
-		ParserSTL parser = new ParserSTL("test1.stl");
-		try {
-			this.meshViewer = new TriangleMeshViewer(parser.read());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public STLPickingTest() {
+    }
 
-	@Override
-	public void start() {
-		if (this.pickCanvas == null)
-			this.initJava3d();
-		ParserSTL parser = new ParserSTL("test1.stl");
-		try {
-			this.meshViewer = new TriangleMeshViewer(parser.read());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void start() {
+        if (this.pickCanvas == null)
+            this.initJava3d();
+        ParserSTL parser = new ParserSTL("test1.stl");
+        try {
+            this.meshViewer = new TriangleMeshViewer(parser.read());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-//	 protected void addCanvas3D(Canvas3D c3d) {
-//	 setLayout(new BorderLayout());
-//	 add(c3d, BorderLayout.CENTER);
-//	 doLayout();
-//	
-//	 if (this.m_SceneBranchGroup != null) {
-//	 c3d.addMouseListener(this);
-//	
-//	 this.pickCanvas = new PickCanvas(c3d, this.m_SceneBranchGroup);
-//	 this.pickCanvas.setMode(PickTool.GEOMETRY_INTERSECT_INFO);
-//	 this.pickCanvas.setTolerance(4.0f);
-//	 }
-//	
-//	 c3d.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//	
-//	 this.simpleUniverse=new SimpleUniverse(c3d);
-//	 BranchGroup group=this.createSceneBranchGroup(c3d);
-//	 this.simpleUniverse.addBranchGraph(group);
-//	 }
-	
-	public void init() {
-		this.setLayout(new BorderLayout());
-		Canvas3D c = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
-		//c.getView().setBackClipDistance(1000);
-		
-		add("Center", c);
-//////////////////////
-		doLayout();
-		if (this.m_SceneBranchGroup != null) {
+    @Override
+    public void init() {
+        this.setLayout(new BorderLayout());
+        Canvas3D c = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
+
+        this.add("Center", c);
+
+        this.doLayout();
+        if (this.m_SceneBranchGroup != null) {
             c.addMouseListener(this);
 
             this.pickCanvas = new PickCanvas(c, this.m_SceneBranchGroup);
             this.pickCanvas.setMode(PickTool.GEOMETRY_INTERSECT_INFO);
             this.pickCanvas.setTolerance(4.0f);
         }
-		c.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		////////////////////////
-		// Setups the SimpleUniverse, attaches the Canvas3D
-		this.simpleUniverse = new SimpleUniverse(c);
-		c.getView().setBackClipDistance(1000);
-		BranchGroup group = this.createSceneBranchGroup(c);
-		this.simpleUniverse.addBranchGraph(group);
+        c.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-	}
+        // Setups the SimpleUniverse, attaches the Canvas3D
+        this.simpleUniverse = new SimpleUniverse(c);
+        c.getView().setBackClipDistance(1000);
+        BranchGroup group = this.createSceneBranchGroup(c);
+        this.simpleUniverse.addBranchGraph(group);
 
-	@Override
-	public TransformGroup[] getViewTransformGroupArray() {
-		TransformGroup[] tgArray = new TransformGroup[1];
-		tgArray[0] = new TransformGroup();
+    }
 
-		Transform3D viewTrans = new Transform3D();
-		Transform3D eyeTrans = new Transform3D();
+    @Override
+    public TransformGroup[] getViewTransformGroupArray() {
+        TransformGroup[] tgArray = new TransformGroup[1];
+        tgArray[0] = new TransformGroup();
 
-		BoundingSphere sceneBounds = (BoundingSphere) this.m_SceneBranchGroup
-				.getBounds();
+        Transform3D viewTrans = new Transform3D();
+        Transform3D eyeTrans = new Transform3D();
 
-		// point the view at the center of the object
-		Point3d center = new Point3d();
-		sceneBounds.getCenter(center);
-		double radius = sceneBounds.getRadius();
-		Vector3d temp = new Vector3d(center);
-		viewTrans.set(temp);
+        BoundingSphere sceneBounds = (BoundingSphere) this.m_SceneBranchGroup
+                .getBounds();
 
-		// pull the eye back far enough to see the whole object
-		double eyeDist = 1.4 * radius / Math.tan(Math.toRadians(40) / 2.0);
-		temp.x = 0.0;
-		temp.y = 0.0;
-		temp.z = eyeDist;
-		eyeTrans.set(temp);
-		viewTrans.mul(eyeTrans);
+        // Point the view at the center of the object
+        Point3d center = new Point3d();
+        sceneBounds.getCenter(center);
+        double radius = sceneBounds.getRadius();
+        Vector3d temp = new Vector3d(center);
+        viewTrans.set(temp);
 
-		// set the view transform
-		tgArray[0].setTransform(viewTrans);
+        // Pull the eye back far enough to see the whole object
+        double eyeDist = 1.4 * radius / Math.tan(Math.toRadians(40) / 2.0);
+        temp.x = 0.0;
+        temp.y = 0.0;
+        temp.z = eyeDist;
+        eyeTrans.set(temp);
+        viewTrans.mul(eyeTrans);
 
-		return tgArray;
-	}
+        // Set the view transform
+        tgArray[0].setTransform(viewTrans);
 
-	protected BranchGroup createSceneBranchGroup(Canvas3D c) {
-		BranchGroup objRoot = super.createSceneBranchGroup();
+        return tgArray;
+    }
 
-		PickingEnvironment pick = new PickingEnvironment(c, objRoot);
+    protected BranchGroup createSceneBranchGroup(Canvas3D c) {
+        BranchGroup objRoot = super.createSceneBranchGroup();
 
-		TransformGroup transformGroup = STLPickingTest.createTransformGroup(
-				pick, this.meshViewer);
+        PickingEnvironment pick = new PickingEnvironment(c, objRoot);
 
-		objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-		objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        TransformGroup transformGroup = STLPickingTest.createTransformGroup(
+                pick, this.meshViewer);
 
-		// light bound
-		// Bounds lightBounds = getApplicationBounds();
-		BoundingSphere lightBounds = new BoundingSphere(new Point3d(0.0, 0.0,
-				0.0), 10000.0);
+        objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 
-		// Ambient light
-		AmbientLight ambLight = new AmbientLight(true, new Color3f(1.0f, 1.0f,
-				1.0f));
-		ambLight.setInfluencingBounds(lightBounds);
-		objRoot.addChild(ambLight);
-		
-		// directional light
-		// DirectionalLight headLight = new DirectionalLight();
-		DirectionalLight headLight = new DirectionalLight(new Color3f(
-				Color.white), new Vector3f(1.0f, -1.0f, -1.0f));
-		headLight.setInfluencingBounds(lightBounds);
-		objRoot.addChild(headLight);
+        // Light bound
+        BoundingSphere lightBounds = new BoundingSphere(new Point3d(0.0, 0.0,
+                0.0), 10000.0);
 
-		objRoot.addChild(transformGroup);
+        // Ambient light
+        AmbientLight ambLight = new AmbientLight(true, new Color3f(1.0f, 1.0f,
+                1.0f));
+        ambLight.setInfluencingBounds(lightBounds);
+        objRoot.addChild(ambLight);
 
-		MovingEnvironment test = new MovingEnvironment(transformGroup);
-		test.setSchedulingBounds(lightBounds);
-		objRoot.addChild(test);
+        // Directional light
+        DirectionalLight headLight = new DirectionalLight(new Color3f(
+                Color.white), new Vector3f(1.0f, -1.0f, -1.0f));
+        headLight.setInfluencingBounds(lightBounds);
+        objRoot.addChild(headLight);
 
-		// Translates camera
-		
-//		this.translateCamera(-255, -18, 390);
-//		pick.getMouseRotate().setCenter(new Point3d(-255, -18, 390));
-		/////////////////////////////
-		this.translateCamera((float)meshViewer.getCentroid().getX(), (float)meshViewer.getCentroid().getY(), (float)meshViewer.getCentroid().getZ()+20);
-		Point3d orientPoint=new Point3d();
-		orientPoint.setX(meshViewer.getCentroid().getX());
-		orientPoint.setY(meshViewer.getCentroid().getY());
-		orientPoint.setZ(meshViewer.getCentroid().getZ());
-		pick.getMouseRotate().setCenter(orientPoint);
-		/////////////////////////////
-		objRoot.compile();
+        objRoot.addChild(transformGroup);
 
-		// TransformGroup mouseGroup = createMouseBehaviorsGroup();
-		// BranchGroup sceneRoot = new BranchGroup();
-		// objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-		// objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-		//
-		// this.meshViewer.createTriangleShapes();
-		// for (TriangleViewer shape : this.meshViewer) {
-		// sceneRoot.addChild(shape);
-		// }
-		//
-		// mouseGroup.addChild(sceneRoot);
-		//
-		// objRoot.addChild(mouseGroup);
+        MovingEnvironment test = new MovingEnvironment(transformGroup);
+        test.setSchedulingBounds(lightBounds);
+        objRoot.addChild(test);
 
-		return objRoot;
-	}
+        // Translates camera
+        this.translateCamera((float) this.meshViewer.getCentroid().getX(),
+                (float) this.meshViewer.getCentroid().getY(),
+                (float) this.meshViewer.getCentroid().getZ() + 20);
+        Point3d orientPoint = new Point3d();
+        orientPoint.setX(this.meshViewer.getCentroid().getX());
+        orientPoint.setY(this.meshViewer.getCentroid().getY());
+        orientPoint.setZ(this.meshViewer.getCentroid().getZ());
+        pick.getMouseRotate().setCenter(orientPoint);
 
-	private static TransformGroup createTransformGroup(PickingEnvironment pick,
-			TriangleMeshViewer meshViewer) {
-		BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,
-				0.0, 0.0), 10000);
+        objRoot.compile();
 
-		TransformGroup transformGroup = new TransformGroup();
-		transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-		transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        return objRoot;
+    }
 
-		TransformGroup translationGroup1 = new TransformGroup();
-		translationGroup1.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-		translationGroup1.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-		transformGroup.addChild(translationGroup1);
+    private static TransformGroup createTransformGroup(PickingEnvironment pick,
+            TriangleMeshViewer meshViewer) {
+        BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,
+                0.0, 0.0), 10000);
 
-		TransformGroup rotationGroup = new TransformGroup();
-		rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-		rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-		translationGroup1.addChild(rotationGroup);
+        TransformGroup transformGroup = new TransformGroup();
+        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 
-		TransformGroup translationGroup2 = new TransformGroup();
-		translationGroup2.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-		translationGroup2.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-		rotationGroup.addChild(translationGroup2);
-		// /////
-//		Point p1 = new Point(1, 1, 1);
-//		Point p2 = new Point(0, 1, 1);
-//		Point p3 = new Point(1, 0, 1);
-		Point p1 = new Point(255, 91, 443);
-		Point p2 = new Point(254, 91, 443);
-		Point p3 = new Point(255, 90, 443);
-		Vector3d normal = new Vector3d(0, 0, 1);
-		Triangle triangle1 = new Triangle(p1, p2, p3, normal);
+        TransformGroup translationGroup1 = new TransformGroup();
+        translationGroup1.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        translationGroup1.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        transformGroup.addChild(translationGroup1);
 
-		TriangleViewer triangleViewer1 = new TriangleViewer(triangle1);
-		triangleViewer1.createShape3D();
-		translationGroup2.addChild(triangleViewer1);
+        TransformGroup rotationGroup = new TransformGroup();
+        rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        rotationGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        translationGroup1.addChild(rotationGroup);
 
-		Point p1bis = new Point(1, 1, 1);
-		Point p2bis = new Point(2, 1, 1);
-		Point p3bis = new Point(1, 2, 1);
-		Triangle triangle2 = new Triangle(p1bis, p2bis, p3bis, normal);
+        TransformGroup translationGroup2 = new TransformGroup();
+        translationGroup2.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        translationGroup2.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        rotationGroup.addChild(translationGroup2);
 
-		TriangleViewer triangleViewer2 = new TriangleViewer(triangle2);
-		triangleViewer2.createShape3D();
-		translationGroup2.addChild(triangleViewer2);
-		/////////////////////////////////////Test pour ajouter tous les triangles dans un seul Shape
-//		BranchGroup sceneRoot=new BranchGroup();
-//		Shape3D shape=new Shape3D();
-//		ArrayList<TriangleArray> TriangleList=meshViewer.createTriangleArray();
-//		
-//		for(int i=0;i<TriangleList.size();i++){
-//			shape.addGeometry(TriangleList.get(i));
-//		}
-//		
-//		sceneRoot.addChild(shape);
-//		translationGroup2.addChild(sceneRoot);
-		/////////////////////////////////////
-		
-		////////////////////////////////////test pour augmenter la capacite d'affichage
-		BranchGroup sceneRoot=new BranchGroup();
-		Shape3D shape=new Shape3D();
-		shape.addGeometry(meshViewer.createTriangle1());
-		//shape.addGeometry(meshViewer.createTriangle2());
-		
-		 Appearance app = new Appearance();
-	        Material mat = null;
-	      
-	        	mat = new Material(new Color3f(0,0,0.2f),new Color3f(0,0,0),new Color3f(Color.blue),new Color3f(Color.green),64);
-	        
-	        mat.setColorTarget(3);
-	        app.setMaterial(mat);
-	        shape.setAppearance(app);
-		sceneRoot.addChild(shape);
-		translationGroup2.addChild(sceneRoot);
-		
-		///////////////////////////////////
-		
-		// ///////////////////
-//		BranchGroup sceneRoot=new BranchGroup();
-//		meshViewer.createTriangleShapes();
-//		for (TriangleViewer shape : meshViewer) {
-//			sceneRoot.addChild(shape);
-//		}
-//		translationGroup2.addChild(sceneRoot);
-		//////////////////////
+        // Appearance
+        Material mat = new Material(new Color3f(0, 0, 0.2f), new Color3f(0, 0,
+                0), new Color3f(Color.blue), new Color3f(Color.green), 64);
+        mat.setColorTarget(3);
 
-		// Links the left button of the mouse with a rotation transformation
-		NewMouseRotate mouseRotate = new NewMouseRotate(translationGroup1,
-				rotationGroup, translationGroup2);
-		mouseRotate.setSchedulingBounds(boundingSphere);
-		translationGroup2.addChild(mouseRotate);
-		pick.setMouseRotate(mouseRotate);
+        Appearance app = new Appearance();
+        app.setMaterial(mat);
 
-		// Links the middle button of the mouse with a zoom transformation
-		MouseZoom mouseZoom = new MouseZoom();
-		mouseZoom.setTransformGroup(transformGroup);
-		transformGroup.addChild(mouseZoom);
-		mouseZoom.setSchedulingBounds(boundingSphere);
+        // Test pour augmenter la capacité d'affichage
+        BranchGroup sceneRoot = new BranchGroup();
 
-		// Links the right button of the mouse with a translation transformation
-		MouseTranslate mouseTranslate = new MouseTranslate();
-		mouseTranslate.setTransformGroup(transformGroup);
-		transformGroup.addChild(mouseTranslate);
-		mouseTranslate.setSchedulingBounds(boundingSphere);
+        Shape3D shape = new Shape3D();
+        shape.addGeometry(meshViewer.createTriangle());
+        shape.setAppearance(app);
 
-		return transformGroup;
+        sceneRoot.addChild(shape);
+        translationGroup2.addChild(sceneRoot);
 
-	}
+        // Links the left button of the mouse with a rotation transformation
+        NewMouseRotate mouseRotate = new NewMouseRotate(translationGroup1,
+                rotationGroup, translationGroup2);
+        mouseRotate.setSchedulingBounds(boundingSphere);
+        translationGroup2.addChild(mouseRotate);
+        pick.setMouseRotate(mouseRotate);
 
-	public void translateCamera(float x, float y, float z) {
-		ViewingPlatform camera = this.simpleUniverse.getViewingPlatform();
-		TransformGroup cameraTransformGroup = camera.getMultiTransformGroup()
-				.getTransformGroup(0);
-		Transform3D cameraTranslation = new Transform3D();
-		cameraTransformGroup.getTransform(cameraTranslation);
-		cameraTranslation.setTranslation(new Vector3f(x, y, z));
-		cameraTransformGroup.setTransform(cameraTranslation);
-	    
-	}
+        // Links the middle button of the mouse with a zoom transformation
+        MouseZoom mouseZoom = new MouseZoom();
+        mouseZoom.setTransformGroup(transformGroup);
+        transformGroup.addChild(mouseZoom);
+        mouseZoom.setSchedulingBounds(boundingSphere);
 
-	// Juste du contrôle souris...
-	// private TransformGroup createMouseBehaviorsGroup() {
-	// BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,
-	// 0.0, 0.0), 10000.);
-	//
-	// TransformGroup examineGroup = new TransformGroup();
-	// examineGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
-	// examineGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-	//
-	// Bounds behaviorBounds = getApplicationBounds();
-	//
-	// MouseRotate mr = new MouseRotate(examineGroup);
-	// mr.setSchedulingBounds(behaviorBounds);
-	// examineGroup.addChild(mr);
-	// mr.setSchedulingBounds(boundingSphere);
-	//
-	// MouseTranslate mt = new MouseTranslate(examineGroup);
-	// mt.setSchedulingBounds(behaviorBounds);
-	// examineGroup.addChild(mt);
-	// mt.setSchedulingBounds(boundingSphere);
-	//
-	// MouseZoom mz = new MouseZoom(examineGroup);
-	// mz.setSchedulingBounds(behaviorBounds);
-	// examineGroup.addChild(mz);
-	// mz.setSchedulingBounds(boundingSphere);
-	//
-	// return examineGroup;
-	// }
+        // Links the right button of the mouse with a translation transformation
+        MouseTranslate mouseTranslate = new MouseTranslate();
+        mouseTranslate.setTransformGroup(transformGroup);
+        transformGroup.addChild(mouseTranslate);
+        mouseTranslate.setSchedulingBounds(boundingSphere);
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println("*** MouseClick ***");
+        return transformGroup;
+    }
 
-		this.pickCanvas.setShapeLocation(e);
+    public void translateCamera(float x, float y, float z) {
+        ViewingPlatform camera = this.simpleUniverse.getViewingPlatform();
+        TransformGroup cameraTransformGroup = camera.getMultiTransformGroup()
+                .getTransformGroup(0);
+        Transform3D cameraTranslation = new Transform3D();
+        cameraTransformGroup.getTransform(cameraTranslation);
+        cameraTranslation.setTranslation(new Vector3f(x, y, z));
+        cameraTransformGroup.setTransform(cameraTranslation);
+    }
 
-		PickResult pickResult = this.pickCanvas.pickClosest();
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        this.pickCanvas.setShapeLocation(e);
+        PickResult pickResult = this.pickCanvas.pickClosest();
 
-		if (pickResult != null) {
-			System.out.println("Closest PickResult: " + pickResult);
+        if (pickResult != null) {
+            System.out.println("Closest PickResult: " + pickResult);
 
-			Node actualNode = pickResult.getObject();
+            Node actualNode = pickResult.getObject();
 
-			if (actualNode.getClass().equals(TriangleViewer.class)) {
-				TriangleViewer triangle = (TriangleViewer) actualNode;
-				triangle.setSelected(true);
-			}
+            if (actualNode.getClass().equals(TriangleViewer.class)) {
+                TriangleViewer triangle = (TriangleViewer) actualNode;
+                triangle.setSelected(true);
+            }
+        }
+    }
 
-		}
-	}
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        //
+    }
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		//
-	}
+    @Override
+    public void mouseExited(MouseEvent e) {
+        //
+    }
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-		//
-	}
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //
+    }
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		//
-	}
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        //
+    }
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		//
-	}
+    @SuppressWarnings("unused")
+    public static void main(String[] args) {
+        STLPickingTest pickingTest = new STLPickingTest();
+        new MainFrame(pickingTest, 500, 400);
+    }
 
-	public static void main(String[] args) {
-		System.out.println("Current user.dir: "
-				+ System.getProperty("user.dir"));
-
-		STLPickingTest pickingTest = new STLPickingTest(args);
-
-		new MainFrame(pickingTest, 500, 400);
-	}
-
-	public void destroy() {
-		this.simpleUniverse.removeAllLocales();
-	}
+    @Override
+    public void destroy() {
+        this.simpleUniverse.removeAllLocales();
+    }
 }
-
