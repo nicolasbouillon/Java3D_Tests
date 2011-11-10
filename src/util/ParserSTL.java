@@ -18,8 +18,8 @@ import java.util.StringTokenizer;
 
 import javax.vecmath.Vector3d;
 
-import model.Mesh;
 import model.Edge;
+import model.Mesh;
 import model.Point;
 import model.Triangle;
 
@@ -79,8 +79,8 @@ public class ParserSTL {
                 final String openingWord = brokenLine.nextToken();
 
                 Set<Triangle> triangleMap;
-                this.pointMap = new HashMap<Point, Point>();
-                this.edgeMap = new HashMap<Edge, Edge>();
+                this.pointMap = new HashMap<>();
+                this.edgeMap = new HashMap<>();
 
                 // If the first word is solid, this means it's an ASCII file.
                 // If it's a binary file, it will not be found.
@@ -169,7 +169,7 @@ public class ParserSTL {
         // Reading part.
 
         // Reads in the ByteBuffer the floats.
-        final Vector3d norm = new Vector3d(bBuf.getFloat(), bBuf.getFloat(),
+        Vector3d norm = new Vector3d(bBuf.getFloat(), bBuf.getFloat(),
                 bBuf.getFloat());
 
         Point p1 = new Point(bBuf.getFloat(), bBuf.getFloat(), bBuf.getFloat());
@@ -229,10 +229,10 @@ public class ParserSTL {
 
         final Scanner scanner = new Scanner(new FileReader(this.fileName));
 
-        this.triangleSet = new HashSet<Triangle>();
+        this.triangleSet = new HashSet<>();
 
         final Vector3d currentVector = new Vector3d();
-        final List<Point> currentPoints = new ArrayList<Point>();
+        final List<Point> currentPoints = new ArrayList<>();
 
         // Reading the file
         try {
@@ -308,7 +308,7 @@ public class ParserSTL {
         final InputStream stream = new BufferedInputStream(new FileInputStream(
                 this.fileName));
 
-        this.triangleSet = new HashSet<Triangle>();
+        this.triangleSet = new HashSet<>();
 
         final int headerSize = 80;
 
@@ -331,8 +331,7 @@ public class ParserSTL {
 
         int counterError = 0;
 
-      //for (int i = 0; i < meshSize; i = i + 1) {
-       for (int i = 0; i < 450000; i = i + 1) {
+        for (int i = 0; i < meshSize; i = i + 1) {
             try {
                 // If a Triangle exists already, and if the
                 // Parser read another
@@ -378,8 +377,8 @@ public class ParserSTL {
      *         edge which already exists and have the same values
      */
     private Edge treatEdge(final Edge edge) {
-
         final Edge eNew = this.edgeMap.get(edge);
+
         if (eNew == null) {
             this.edgeMap.put(edge, edge);
             return edge;

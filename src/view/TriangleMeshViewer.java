@@ -29,12 +29,13 @@ public class TriangleMeshViewer extends HashSet<TriangleViewer> {
 
     // Test pour augmenter la capacite d'affichage
     public TriangleArray createTriangle() {
-        TriangleArray triangleArray = new TriangleArray(this.size() * 3 * 2,
+        TriangleArray triangleArray = new TriangleArray(this.size() * 3,
                 GeometryArray.COORDINATES | GeometryArray.COLOR_3
                         | GeometryArray.NORMALS);
 
         int i = 0;
         for (TriangleViewer triangle : this) {
+
             triangleArray.setCoordinate(i, new Point3d(triangle.getTriangle()
                     .getP1().getX(), triangle.getTriangle().getP1().getY(),
                     triangle.getTriangle().getP1().getZ()));
@@ -44,15 +45,6 @@ public class TriangleMeshViewer extends HashSet<TriangleViewer> {
             triangleArray.setCoordinate(i + 2, new Point3d(triangle
                     .getTriangle().getP3().getX(), triangle.getTriangle()
                     .getP3().getY(), triangle.getTriangle().getP3().getZ()));
-            triangleArray.setCoordinate(i + 3, new Point3d(triangle
-                    .getTriangle().getP2().getX(), triangle.getTriangle()
-                    .getP2().getY(), triangle.getTriangle().getP2().getZ()));
-            triangleArray.setCoordinate(i + 4, new Point3d(triangle
-                    .getTriangle().getP1().getX(), triangle.getTriangle()
-                    .getP1().getY(), triangle.getTriangle().getP1().getZ()));
-            triangleArray.setCoordinate(i + 5, new Point3d(triangle
-                    .getTriangle().getP3().getX(), triangle.getTriangle()
-                    .getP3().getY(), triangle.getTriangle().getP3().getZ()));
 
             triangleArray.setNormal(i,
                     TriangleViewer.convertNormal(triangle.getTriangle()));
@@ -60,14 +52,8 @@ public class TriangleMeshViewer extends HashSet<TriangleViewer> {
                     TriangleViewer.convertNormal(triangle.getTriangle()));
             triangleArray.setNormal(i + 2,
                     TriangleViewer.convertNormal(triangle.getTriangle()));
-            triangleArray.setNormal(i + 3, TriangleViewer
-                    .convertOppositeNormal(triangle.getTriangle()));
-            triangleArray.setNormal(i + 4, TriangleViewer
-                    .convertOppositeNormal(triangle.getTriangle()));
-            triangleArray.setNormal(i + 5, TriangleViewer
-                    .convertOppositeNormal(triangle.getTriangle()));
 
-            i = i + 6;
+            i = i + 3;
         }
         return triangleArray;
     }
