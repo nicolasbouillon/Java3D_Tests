@@ -356,7 +356,7 @@ public class ParserSTL {
                 // removed from the mesh.
                 ++counterError;
             } catch (BadMeshException e) {
-                // This execption is supposed to be treated in the three catch
+                // This exception is supposed to be treated in the three catch
                 // above.
             }
         }

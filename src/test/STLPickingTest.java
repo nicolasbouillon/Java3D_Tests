@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.Set;
 
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.Appearance;
@@ -18,6 +19,7 @@ import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.media.j3d.TriangleArray;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -210,12 +212,18 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
         // Test pour augmenter la capacité d'affichage
         BranchGroup sceneRoot = new BranchGroup();
 
+        translationGroup2.addChild(sceneRoot);
+
         Shape3D shape = new Shape3D();
-        shape.addGeometry(meshViewer.createTriangle());
-        shape.setAppearance(app);
+
+        Set<TriangleArray> tList = meshViewer.createTriangle();
+
+        for (TriangleArray ta : tList) {
+            shape.addGeometry(ta);
+        }
 
         sceneRoot.addChild(shape);
-        translationGroup2.addChild(sceneRoot);
+        shape.setAppearance(app);
 
         // Links the left button of the mouse with a rotation transformation
         NewMouseRotate mouseRotate = new NewMouseRotate(translationGroup1,

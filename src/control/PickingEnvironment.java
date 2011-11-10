@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 
+import view.TriangleArrayChild;
 import view.TriangleViewer;
 
 import com.sun.j3d.utils.picking.PickCanvas;
@@ -60,8 +61,9 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
             if (result == null) {
                 System.out.println("Nothing picked");
             } else {
-                System.out.println(result.getNode(PickResult.SHAPE3D)
-                        .getClass());
+                TriangleArrayChild ta = (TriangleArrayChild) result
+                        .getGeometryArray();
+                System.out.println(ta.toString());
                 // TriangleViewer s = (TriangleViewer) result
                 // .getNode(PickResult.SHAPE3D);
                 // if (s != null) {
