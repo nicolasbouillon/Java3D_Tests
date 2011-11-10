@@ -14,8 +14,9 @@ import view.TriangleArrayChild;
 import view.TriangleViewer;
 
 import com.sun.j3d.utils.picking.PickCanvas;
-import com.sun.j3d.utils.picking.PickResult;
+import com.sun.j3d.utils.picking.PickIntersection;
 import com.sun.j3d.utils.picking.PickTool;
+import com.sun.j3d.utils.picking.PickResult;
 
 public class PickingEnvironment implements MouseListener, MouseMotionListener {
 
@@ -55,15 +56,17 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
         int buttonDown = e.getButton();
 
         if (buttonDown == MouseEvent.BUTTON1) {
-            // Bouton gauche enfoncé
+            // Bouton gauche enfonc
             this.pickCanvas.setShapeLocation(e);
             PickResult result = this.pickCanvas.pickClosest();
             if (result == null) {
                 System.out.println("Nothing picked");
             } else {
-                TriangleArrayChild ta = (TriangleArrayChild) result
+                PickIntersection PI = result.getIntersection(0);
+                TriangleArrayChild ta = (TriangleArrayChild) PI
                         .getGeometryArray();
                 System.out.println(ta.triangle);
+                // mouseRotate.setCenter(ta);
             }
         }
     }
