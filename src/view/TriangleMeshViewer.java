@@ -10,9 +10,9 @@ import model.Point;
 import model.Triangle;
 
 
-//public  class TriangleMeshViewer extends HashSet<TriangleViewer> {
+public  class TriangleMeshViewer extends HashSet<TriangleViewer> {
 
-public class TriangleMeshViewer {
+//public class TriangleMeshViewer {
 
 
     public Point centroid;
@@ -36,6 +36,10 @@ public class TriangleMeshViewer {
             triangleArrayList.add(new TriangleArrayChild(triangle));
         }
         return triangleArrayList;
+    }
+    public TriangleArraySon createTriangleArraySon() {
+       TriangleArraySon TAS=new TriangleArraySon(this.mesh);
+       return TAS;
     }
 
     

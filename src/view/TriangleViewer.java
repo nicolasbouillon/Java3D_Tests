@@ -81,7 +81,7 @@ public class TriangleViewer extends Shape3D {
         triangle2.setNormal(0, convertOppositeNormal(this.triangle));
         triangle2.setNormal(1, convertOppositeNormal(this.triangle));
         triangle2.setNormal(2, convertOppositeNormal(this.triangle));
-
+      
         // Appearance to make the object visible if light
         triangle1.setColor(0, new Color3f(1, 0, 0));
         triangle1.setColor(1, new Color3f(1, 0, 0));
