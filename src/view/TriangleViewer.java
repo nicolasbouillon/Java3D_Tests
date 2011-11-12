@@ -75,12 +75,13 @@ public class TriangleViewer extends Shape3D {
         triangle2.setCoordinate(1, new Point3d(this.triangle.getP1().getX(),
                 this.triangle.getP1().getY(), this.triangle.getP1().getZ()));
         triangle2.setCoordinate(2, new Point3d(this.triangle.getP3().getX(),
+
                 this.triangle.getP3().getY(), this.triangle.getP3().getZ()));
 
         triangle2.setNormal(0, convertOppositeNormal(this.triangle));
         triangle2.setNormal(1, convertOppositeNormal(this.triangle));
         triangle2.setNormal(2, convertOppositeNormal(this.triangle));
-
+      
         // Appearance to make the object visible if light
         triangle1.setColor(0, new Color3f(1, 0, 0));
         triangle1.setColor(1, new Color3f(1, 0, 0));
@@ -95,6 +96,7 @@ public class TriangleViewer extends Shape3D {
         this.setCapability(ALLOW_APPEARANCE_READ);
         this.setCapability(ALLOW_APPEARANCE_WRITE);
     }
+
 
     // Un seul Shape
     public TriangleArray createTriangle1() {
@@ -152,6 +154,7 @@ public class TriangleViewer extends Shape3D {
                         .getNormal().getY(), (float) triangle.getNormal()
                         .getZ());
         return normalFloat;
+
     }
 
     public static Vector3f convertOppositeNormal(Triangle triangle) {

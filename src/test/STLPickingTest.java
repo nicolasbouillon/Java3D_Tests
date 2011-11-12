@@ -6,6 +6,8 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.Set;
 
 import javax.media.j3d.AmbientLight;
@@ -14,9 +16,18 @@ import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.GLSLShaderProgram;
+import javax.media.j3d.Group;
+import javax.media.j3d.ImageComponent2D;
 import javax.media.j3d.Material;
 import javax.media.j3d.Node;
+import javax.media.j3d.Shader;
+import javax.media.j3d.ShaderAppearance;
+import javax.media.j3d.ShaderProgram;
 import javax.media.j3d.Shape3D;
+import javax.media.j3d.SourceCodeShader;
+import javax.media.j3d.Texture2D;
+import javax.media.j3d.TextureAttributes;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.TriangleArray;
@@ -25,16 +36,23 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
+
+
+
 import util.ParserSTL;
+import view.TriangleArraySon;
 import view.TriangleMeshViewer;
 import view.TriangleViewer;
 
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
+import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.picking.PickCanvas;
+
 import com.sun.j3d.utils.picking.PickResult;
 import com.sun.j3d.utils.picking.PickTool;
+import com.sun.j3d.utils.shader.StringIO;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
@@ -50,6 +68,7 @@ import control.PickingEnvironment;
  */
 public class STLPickingTest extends Java3dApplet implements MouseListener {
 
+
     private static final long serialVersionUID = 1L;
 
     PickCanvas pickCanvas;
@@ -59,7 +78,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
     public STLPickingTest() {
         if (this.pickCanvas == null)
             this.initJava3d();
-        ParserSTL parser = new ParserSTL("test.stl");
+        ParserSTL parser = new ParserSTL("test1.stl");
         try {
             this.meshViewer = new TriangleMeshViewer(parser.read());
         } catch (IOException e) {
@@ -87,6 +106,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
             this.pickCanvas.setMode(PickTool.GEOMETRY_INTERSECT_INFO);
             this.pickCanvas.setTolerance(4.0f);
         }
+
         c.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Setups the SimpleUniverse, attaches the Canvas3D
@@ -143,6 +163,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
         // Light bound
         BoundingSphere lightBounds = new BoundingSphere(new Point3d(0.0, 0.0,
                 0.0), 10000.0);
+
 
         // Ambient light
         AmbientLight ambLight = new AmbientLight(true, new Color3f(1.0f, 1.0f,
@@ -201,29 +222,67 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
         translationGroup2.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
         rotationGroup.addChild(translationGroup2);
 
-        // Appearance
-        Material mat = new Material(new Color3f(0, 0, 0.2f), new Color3f(0, 0,
-                0), new Color3f(Color.blue), new Color3f(Color.green), 64);
+        // Appearance et texture
+        Material mat = new Material(new Color3f(0, 0, 0f), new Color3f(0, 0,
+                0), new Color3f(Color.white), new Color3f(Color.white), 64);
         mat.setColorTarget(3);
 
         Appearance app = new Appearance();
+       
         app.setMaterial(mat);
+        
+        TextureLoader loader=new TextureLoader("texture.jpg",null);
+     	ImageComponent2D image=loader.getImage();
+     	Texture2D texture = new Texture2D(Texture2D.BASE_LEVEL, Texture2D.RGB, image.getWidth(), image.getHeight());
+     	texture.setImage(0, image);
+     	app.setTexture(texture);
+     	TextureAttributes texAtt=new TextureAttributes();
+     	texAtt.setTextureMode(TextureAttributes.MODULATE);
+     	app.setTextureAttributes(texAtt);
 
-        // Test pour augmenter la capacité d'affichage
+        // Test pour augmenter la capacitï¿½d'affichage
         BranchGroup sceneRoot = new BranchGroup();
 
         translationGroup2.addChild(sceneRoot);
 
         Shape3D shape = new Shape3D();
-
-        Set<TriangleArray> tList = meshViewer.createTriangle();
-
-        for (TriangleArray ta : tList) {
-            shape.addGeometry(ta);
-        }
-
+/////////////////////////Test
+//        Set<TriangleArray> tList = meshViewer.createTriangle();
+//
+//        for (TriangleArray ta : tList) {
+//            shape.addGeometry(ta);
+//        }
+        TriangleArraySon TAS=meshViewer.createTriangleArraySon();
+        shape.addGeometry(TAS);
+/////////////////////////////
         sceneRoot.addChild(shape);
-        shape.setAppearance(app);
+       shape.setAppearance(app);
+        
+        
+        //////////////////////Shader test
+     // Set vertex and fragment shader program for all Shape3D nodes in scene
+//    	String vertexProgram = null;
+//    	String fragmentProgram = null;
+//    	try {
+//    		URL url=Resources.getResource("/polkadot3d.vert");
+//    	    vertexProgram = StringIO.readFully(url);
+//    	    
+//    	    fragmentProgram = StringIO.readFully(Resources.getResource("polkadot3d.frag"));
+//    	}
+//    	catch (IOException e) {
+//    	    throw new RuntimeException(e);
+//    	}
+//    	Shader[] shaders = new Shader[2];
+//    	shaders[0] = new SourceCodeShader(Shader.SHADING_LANGUAGE_GLSL,
+//    					  Shader.SHADER_TYPE_VERTEX,
+//    					  vertexProgram);
+//    	shaders[1] = new SourceCodeShader(Shader.SHADING_LANGUAGE_GLSL,
+//    					  Shader.SHADER_TYPE_FRAGMENT,
+//    					  fragmentProgram);
+//    	ShaderProgram shaderProgram = new GLSLShaderProgram();
+//    	shaderProgram.setShaders(shaders);
+//    	setShaderProgram(sceneRoot, shaderProgram);
+        /////////////////////
 
         // Links the left button of the mouse with a rotation transformation
         NewMouseRotate mouseRotate = new NewMouseRotate(translationGroup1,
@@ -304,4 +363,32 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
     public void destroy() {
         this.simpleUniverse.removeAllLocales();
     }
+    //////////////shader test
+    // Set shader program for all nodes in specified branch graph
+    private static void setShaderProgram(BranchGroup g, ShaderProgram shaderProgram) {
+	ShaderAppearance myApp = new ShaderAppearance();
+	Material mat = new Material();
+	myApp.setShaderProgram(shaderProgram);
+	myApp.setMaterial(mat);
+	setShaderProgram(g, myApp);
+    }
+    
+    // Recursively set shader program for all children of specified group
+    private static void setShaderProgram(Group g,
+				  ShaderAppearance myApp) {
+
+	Enumeration e = g.getAllChildren();
+	while (e.hasMoreElements()) {
+	    Node n = (Node)(e.nextElement());
+	    if (n instanceof Group) {
+		setShaderProgram((Group)n, myApp);
+	    }
+	    else if (n instanceof Shape3D) {
+		Shape3D s = (Shape3D)n;
+		s.setAppearance(myApp);
+	    }
+	}
+    }
+    
+    /////////////
 }
