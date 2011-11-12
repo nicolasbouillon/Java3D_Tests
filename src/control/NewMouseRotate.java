@@ -13,10 +13,11 @@ import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import view.TriangleView;
+
 import model.Triangle;
 
-import view.TriangleArrayChild;
-import view.TriangleViewer;
+
 
 import com.sun.j3d.utils.behaviors.mouse.MouseBehaviorCallback;
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
@@ -43,7 +44,7 @@ public class NewMouseRotate extends MouseRotate{
 		this.center = center;
 	}
 
-	public void setCenter(TriangleViewer triangle) {
+	public void setCenter(TriangleView triangle) {
 		double x,y,z;
 		x = (triangle.getTriangle().getP1().getX()+ 
 				triangle.getTriangle().getP2().getX() +
@@ -57,19 +58,7 @@ public class NewMouseRotate extends MouseRotate{
 		setCenter(new Point3d(x,y,z));
 	}
 	
-	public void setCenter(TriangleArrayChild triangle) {
-		double x,y,z;
-		x = (triangle.triangle.getP1().getX()+ 
-				triangle.triangle.getP2().getX() +
-				triangle.triangle.getP3().getX())/3;
-		y = (triangle.triangle.getP1().getY()+ 
-				triangle.triangle.getP2().getY() +
-				triangle.triangle.getP3().getY())/3;
-		z = (triangle.triangle.getP1().getZ()+ 
-				triangle.triangle.getP2().getZ() +
-				triangle.triangle.getP3().getZ())/3;
-		setCenter(new Point3d(x,y,z));
-	}
+	
 	
 	public void setCenter(Triangle triangle) {
 		double x,y,z;

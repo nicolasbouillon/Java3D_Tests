@@ -12,20 +12,6 @@ public class TriangleView
         this.triangle = triangleIn;
     }
 
-    public void selectOrUnselect(int i)
-    {
-        if (this.selected)
-        {
-            // FIXME
-            // this.changeColor(i);
-        } else
-        {
-            // FIXME
-            // this.changeColor(i);
-        }
-        this.selected = !this.selected;
-    }
-
     public void setSelected(boolean selectedIn)
     {
         this.selected = selectedIn;
@@ -40,4 +26,6 @@ public class TriangleView
     {
         return this.triangle;
     }
+    
+  
 }

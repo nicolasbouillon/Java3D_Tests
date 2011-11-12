@@ -9,24 +9,13 @@ import java.awt.event.WindowEvent;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
-import javax.media.j3d.GeometryArray;
-import javax.media.j3d.Shape3D;
-import javax.media.j3d.TriangleArray;
-import javax.vecmath.Point3d;
 
-
-import view.TriangleArrayChild;
-import view.TriangleArraySon;
-import view.TriangleViewer;
+import view.TriangleMeshView;
 
 import com.sun.j3d.utils.picking.PickCanvas;
-
-
 import com.sun.j3d.utils.picking.PickIntersection;
 import com.sun.j3d.utils.picking.PickResult;
-
 import com.sun.j3d.utils.picking.PickTool;
-
 
 
 public class PickingEnvironment implements MouseListener, MouseMotionListener {
@@ -79,13 +68,9 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
             	PickIntersection PI=result.getIntersection(0);
             	int []PointIndex=PI.getPrimitiveVertexIndices();
             	int TriangleIndex=PointIndex[0]/3;
-            	TriangleArraySon TAS=(TriangleArraySon)PI.getGeometryArray();
-            	//System.out.println(TAS.Triangle.get(TriangleIndex));
-                TAS.selectOrUnselect(TriangleIndex);
-            	//TriangleArrayChild ta=(TriangleArrayChild) PI.getGeometryArray();
-                //System.out.println(ta.triangle);
-//                ta.selectOrUnselect();
-                mouseRotate.setCenter(TAS.Triangle.get(TriangleIndex));
+            	TriangleMeshView triangleMeshView=(TriangleMeshView)PI.getGeometryArray();
+            	triangleMeshView.selectOrUnselect(TriangleIndex);         
+                mouseRotate.setCenter(triangleMeshView.getTriangleArray().get(TriangleIndex));
 
             }
         }
@@ -109,21 +94,12 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
                     if (result == null) {
                         System.out.println("Nothing picked");
                     } else {
-//                    	PickIntersection PI=result.getIntersection(0);
-//                    	TriangleArrayChild ta=(TriangleArrayChild) PI.getGeometryArray();
-//                       // System.out.println(ta.triangle);
-//                        ta.select();
-//                        mouseRotate.setCenter(ta);
                     	PickIntersection PI=result.getIntersection(0);
                     	int []PointIndex=PI.getPrimitiveVertexIndices();
                     	int TriangleIndex=PointIndex[0]/3;
-                    	TriangleArraySon TAS=(TriangleArraySon)PI.getGeometryArray();
-                    	//System.out.println(TAS.Triangle.get(TriangleIndex));
-                    	TAS.select(TriangleIndex);
-                    	//TriangleArrayChild ta=(TriangleArrayChild) PI.getGeometryArray();
-                        //System.out.println(ta.triangle);
-//                        ta.selectOrUnselect();
-                        mouseRotate.setCenter(TAS.Triangle.get(TriangleIndex));
+                    	TriangleMeshView triangleMeshView=(TriangleMeshView)PI.getGeometryArray();
+                        triangleMeshView.select(TriangleIndex);
+                        mouseRotate.setCenter(triangleMeshView.getTriangleArray().get(TriangleIndex));
 
                     }
                 }
