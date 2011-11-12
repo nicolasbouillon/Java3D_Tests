@@ -9,11 +9,11 @@ import javax.vecmath.Point3d;
 import model.Polyline;
 
 
-public class PolylineViewer {
+public class PolylineView {
 	private Polyline polyline;
 	private boolean selected;
 	
-	public PolylineViewer(Polyline poly){
+	public PolylineView(Polyline poly){
 		this.polyline=poly;
 	}
 	

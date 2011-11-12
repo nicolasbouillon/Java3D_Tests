@@ -41,7 +41,7 @@ import javax.vecmath.Vector3f;
 
 import util.ParserSTL;
 import view.TriangleArraySon;
-import view.TriangleMeshViewer;
+import view.TriangleMeshView;
 import view.TriangleViewer;
 
 import com.sun.j3d.utils.applet.MainFrame;
@@ -72,7 +72,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
     private static final long serialVersionUID = 1L;
 
     PickCanvas pickCanvas;
-    TriangleMeshViewer meshViewer;
+    TriangleMeshView meshViewer;
     SimpleUniverse simpleUniverse;
 
     public STLPickingTest() {
@@ -80,7 +80,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
             this.initJava3d();
         ParserSTL parser = new ParserSTL("test1.stl");
         try {
-            this.meshViewer = new TriangleMeshViewer(parser.read());
+            this.meshViewer = new TriangleMeshView(parser.read());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -199,7 +199,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
     }
 
     private static TransformGroup createTransformGroup(PickingEnvironment pick,
-            TriangleMeshViewer meshViewer) {
+            TriangleMeshView meshViewer) {
         BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,
                 0.0, 0.0), 10000);
 
