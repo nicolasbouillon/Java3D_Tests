@@ -12,11 +12,14 @@ import java.util.List;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
+import javax.vecmath.Vector3d;
 
 
+import model.Point;
 import model.Triangle;
 
 import view.TriangleMeshView;
+import view.TriangleView;
 
 import com.sun.j3d.utils.picking.PickCanvas;
 import com.sun.j3d.utils.picking.PickIntersection;
@@ -80,59 +83,61 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
 
             }
         }
+        else if (buttonDown == MouseEvent.BUTTON3) {
+
+            // Bouton gauche enfonc
+
+            this.pickCanvas.setShapeLocation(e);
+            PickResult result = this.pickCanvas.pickClosest();
+            if (result == null) {
+                System.out.println("Nothing picked");
+            } else {
+
+            	PickIntersection PI=result.getIntersection(0);
+            	int []PointIndex=PI.getPrimitiveVertexIndices();
+            	int TriangleIndex=PointIndex[0]/3;
+            	TriangleMeshView triangleMeshView=(TriangleMeshView)PI.getGeometryArray();
+            	triangleMeshView.selectOrUnselect(TriangleIndex); 
+            	List<Integer>triangleSelected=new ArrayList<Integer>();
+            	List<Integer>triangleNewSelected=new ArrayList<Integer>();
+            	triangleSelected.add(TriangleIndex);
+            	triangleNewSelected.add(TriangleIndex);
+            	int turn=30;
+            	selectVoisin(triangleSelected,triangleNewSelected,triangleMeshView,turn);
+                mouseRotate.setCenter(triangleMeshView.getTriangleArray().get(TriangleIndex));
+
+            }
+        }
     }
-//    public void mouseClicked(MouseEvent e) {
-//        int buttonDown = e.getButton();
-//
-//        if (buttonDown == MouseEvent.BUTTON1) {
-//
-//            // Bouton gauche enfonc
-//
-//            this.pickCanvas.setShapeLocation(e);
-//            PickResult result = this.pickCanvas.pickClosest();
-//            if (result == null) {
-//                System.out.println("Nothing picked");
-//            } else {
-//
-//            	PickIntersection PI=result.getIntersection(0);
-//            	int []PointIndex=PI.getPrimitiveVertexIndices();
-//            	int TriangleIndex=PointIndex[0]/3;
-//            	TriangleMeshView triangleMeshView=(TriangleMeshView)PI.getGeometryArray();
-//            	triangleMeshView.selectOrUnselect(TriangleIndex); 
-//            	List<Integer>triangleSelected=new ArrayList<Integer>();
-//            	List<Integer>triangleNewSelected=new ArrayList<Integer>();
-//            	triangleSelected.add(TriangleIndex);
-//            	triangleNewSelected.add(TriangleIndex);
-//            	int turn=10;
-//            	selectVoisin(triangleSelected,triangleNewSelected,triangleMeshView,turn);
-//                mouseRotate.setCenter(triangleMeshView.getTriangleArray().get(TriangleIndex));
-//
-//            }
-//        }
-//    }
+   
     //slectionner des triangles autour du triangle clique, turn est le tour de selection. le premier tour,
     //on selectionne trois voisins du triangle clique, le deuxieme tour, on selectionne des voisins de ces trois triangles,
     //pour chaque tour, on refait comme ca
     //triangleSelected pour recuperer des triangles selectionnes
     //triangleNewSelected sauvgarder des triangels selctionnes dans chaque tour
     public void selectVoisin(List<Integer>triangleSelected,List<Integer>triangleNewSelected,TriangleMeshView triangleMeshView,int turn){
+    	
+    	Vector3d normal=triangleMeshView.getTriangleArray().get(triangleSelected.get(0)).getTriangle().getNormal();
  	   for(int i=0;i<turn;i++){
  		   List<Integer>triangleCount=new ArrayList<Integer>();
  		   for(int j:triangleNewSelected){
  			   List<Triangle> triangleNeighbour=triangleMeshView.getTriangleArray().get(j).getTriangle().getNeighbours();
  			  
  			  for(int l=0;l<triangleNeighbour.size();l++){
- 			   for(int k=0;k<triangleMeshView.getTriangleArray().size();k++){
- 				   
- 				   if(triangleMeshView.getTriangleArray().get(k).getTriangle().equals(triangleNeighbour.get(l))){
- 					   triangleMeshView.select(k);
- 					   triangleSelected.add(k);
- 					   triangleCount.add(k);
- 					    break;
-		   
- 				   }
- 				   
- 			   }
+
+ 				 int triangleNeighbourIndex=triangleNeighbour.get(l).getTriangleViewIndex();
+ 				 if(triangleSelected.contains(triangleNeighbourIndex)==false){
+ 					  Boolean isParalle;
+ 					  isParalle=triangleNeighbour.get(l).isParalleTo(normal, 0.5);
+ 					 
+ 					 if(isParalle){
+ 						triangleMeshView.select(triangleNeighbourIndex);
+ 	 	 				 triangleSelected.add(triangleNeighbourIndex);
+ 	 	 				 triangleCount.add(triangleNeighbourIndex);
+ 					 }
+ 					 
+ 				 }
+ 				
  			  }
  			  
  		   }
@@ -158,8 +163,8 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
         int buttonDown = e.getButton();
         if (buttonDown == MouseEvent.BUTTON1) {
         	//puisque chaque fois on selectionne certains triangles autour du triangle pique, donc on peut agrandir le pas de recurrence
-            for (int x = this.xPressed; x < e.getX(); x = x + 10) {
-                for (int y = this.yPressed; y < e.getY(); y = y + 10) {
+            for (int x = this.xPressed; x < e.getX(); x = x + 30) {
+                for (int y = this.yPressed; y < e.getY(); y = y + 30) {
                     this.pickCanvas.setShapeLocation(x, y);
                    
                     PickResult result = this.pickCanvas.pickClosest();
@@ -175,7 +180,7 @@ public class PickingEnvironment implements MouseListener, MouseMotionListener {
                     	List<Integer>triangleNewSelected=new ArrayList<Integer>();
                         triangleSelected.add(TriangleIndex);
                     	triangleNewSelected.add(TriangleIndex);
-                    	int turn=3;
+                    	int turn=10;
                     	selectVoisin(triangleSelected,triangleNewSelected,triangleMeshView,turn);
                         mouseRotate.setCenter(triangleMeshView.getTriangleArray().get(TriangleIndex));
 

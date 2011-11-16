@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.vecmath.Vector3d;
 
+import view.TriangleView;
+
 import model.Edge;
 
 /**
@@ -18,6 +20,8 @@ import model.Edge;
  * @author Daniel Lefevre, Eric Berthe, Valentin Roger, Elsa Arroud-Vignod
  */
 public class Triangle {
+	
+	private int triangleViewIndex;
 
     /**
      * Array of three points of the triangle.
@@ -52,6 +56,7 @@ public class Triangle {
      * @param normalNew
      *            the normal of the triangle
      */
+    
     public Triangle(final Point point0, final Point point1, final Point point2,
         final Edge edge1, final Edge edge2, final Edge edge3,
         final Vector3d normalNew) {
@@ -394,6 +399,7 @@ public class Triangle {
         return this.normal.dot(norm) < error && this.normal.dot(norm) > -error;
     }
 
+    
     /**
      * Recursive method which returns in ret all the neighbours (and the
      * neighbours of these neighbours...) of this triangle which belong to the
@@ -615,4 +621,18 @@ public class Triangle {
         }
         return null;
     }
+
+
+	public int getTriangleViewIndex() {
+		return triangleViewIndex;
+	}
+
+	public void setTriangleViewIndex(int triangleViewIndex) {
+		this.triangleViewIndex = triangleViewIndex;
+	}
+	
+	 public final boolean isParalleTo(final Vector3d norm, final double error) {
+	        return this.normal.angle(norm) < error && this.normal.angle(norm) > -error;
+		
+	    }
 }

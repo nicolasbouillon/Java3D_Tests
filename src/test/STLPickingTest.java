@@ -59,9 +59,9 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	public STLPickingTest() {
 		if (this.pickCanvas == null)
 			this.initJava3d();
-		ParserSTL parser = new ParserSTL("test.stl");
+		ParserSTL parser = new ParserSTL("test1.stl");
 		try {
-			this.meshViewer = new TriangleMeshView(parser.read());
+			this.meshViewer = new TriangleMeshView(parser.read());/////////////////
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

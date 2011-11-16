@@ -1,10 +1,12 @@
 package view;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.TriangleArray;
 
+import javax.vecmath.Color3f;
 import javax.vecmath.Point2f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
@@ -28,8 +30,12 @@ public class TriangleMeshView extends TriangleArray {
 		this.centroid = m.getCentroid();
 
 		this.trianglesViewList = new ArrayList<>();
+		int triangleCount=0;
 		for (Triangle triangle : this.mesh) {
-			this.trianglesViewList.add(new TriangleView(triangle));
+			TriangleView triangleView = new TriangleView(triangle);
+			this.trianglesViewList.add(triangleView);
+			triangle.setTriangleViewIndex(triangleCount);
+			triangleCount++;
 		}
 
 		this.setCapability(ALLOW_COLOR_WRITE);
@@ -42,6 +48,7 @@ public class TriangleMeshView extends TriangleArray {
 
 			triangleView.setSelected(false);
 
+			
 			this.setCoordinate(i, new Point3d(triangleView.getTriangle()
 					.getP1().getX(), triangleView.getTriangle().getP1().getY(),
 					triangleView.getTriangle().getP1().getZ()));
@@ -61,6 +68,10 @@ public class TriangleMeshView extends TriangleArray {
 			this.setTextureCoordinate(i, new Point2f(0.0f, 1.0f));
 			this.setTextureCoordinate(i + 1, new Point2f(0.0f, 0.0f));
 			this.setTextureCoordinate(i + 2, new Point2f(1.0f, 0.0f));
+//			Color3f color1=new Color3f(0,0,1);
+//			this.setColor(i,   color1);
+//			this.setColor(i+1, color1);
+//			this.setColor(i+2, color1);
 
 			i = i + 3;
 		}
@@ -77,6 +88,10 @@ public class TriangleMeshView extends TriangleArray {
 		this.setTextureCoordinate(i * 3, new Point2f(0.0f, 1.0f));
 		this.setTextureCoordinate(i * 3 + 1, new Point2f(1.0f, 1.0f));
 		this.setTextureCoordinate(i * 3 + 2, new Point2f(1.0f, 0.0f));
+//		Color3f color1=new Color3f(1,0,1);
+//		this.setColor(i,   color1);
+//		this.setColor(i+1, color1);
+//		this.setColor(i+2, color1);
 	}
 
 	public void selectOrUnselect(int i) {
@@ -86,12 +101,20 @@ public class TriangleMeshView extends TriangleArray {
 			this.setTextureCoordinate(i * 3, new Point2f(0.0f, 1.0f));
 			this.setTextureCoordinate(i * 3 + 1, new Point2f(0.0f, 0.0f));
 			this.setTextureCoordinate(i * 3 + 2, new Point2f(1.0f, 0.0f));
+//			Color3f color1=new Color3f(0,0,1);
+//			this.setColor(i*3,   color1);
+//			this.setColor(i*3+1, color1);
+//			this.setColor(i*3+2, color1);
 		} else {
 			this.trianglesViewList.get(i).setSelected(true);
 
 			this.setTextureCoordinate(i * 3, new Point2f(0.0f, 1.0f));
 			this.setTextureCoordinate(i * 3 + 1, new Point2f(1.0f, 1.0f));
 			this.setTextureCoordinate(i * 3 + 2, new Point2f(1.0f, 0.0f));
+//			Color3f color1=new Color3f(1,0,1);
+//			this.setColor(i*3,   color1);
+//			this.setColor(i*3+1, color1);
+//			this.setColor(i*3+2, color1);
 		}
 	}
 
@@ -101,11 +124,19 @@ public class TriangleMeshView extends TriangleArray {
 			this.setTextureCoordinate(i * 3, new Point2f(0.0f, 1.0f));
 			this.setTextureCoordinate(i * 3 + 1, new Point2f(1.0f, 1.0f));
 			this.setTextureCoordinate(i * 3 + 2, new Point2f(1.0f, 0.0f));
+//			Color3f color1=new Color3f(1,0,1);
+//			this.setColor(i*3,   color1);
+//			this.setColor(i*3+1, color1);
+//			this.setColor(i*3+2, color1);
 		} else {
 
 			this.setTextureCoordinate(i * 3, new Point2f(0.0f, 1.0f));
 			this.setTextureCoordinate(i * 3 + 1, new Point2f(0.0f, 0.0f));
 			this.setTextureCoordinate(i * 3 + 2, new Point2f(1.0f, 0.0f));
+//			Color3f color1=new Color3f(0,0,1);
+//			this.setColor(i*3,   color1);
+//			this.setColor(i*3+1, color1);
+//			this.setColor(i*3+2, color1);
 		}
 
 	}
