@@ -6,6 +6,7 @@ public class TriangleView
 {
     public Triangle triangle;
     private boolean selected;
+   
 
     public TriangleView(Triangle triangleIn)
     {
@@ -27,5 +28,6 @@ public class TriangleView
         return this.triangle;
     }
     
+  
   
 }

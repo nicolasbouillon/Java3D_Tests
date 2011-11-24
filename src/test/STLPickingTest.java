@@ -5,34 +5,35 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
+
 
 import javax.media.j3d.AmbientLight;
-import javax.media.j3d.Appearance;
+
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.DirectionalLight;
-import javax.media.j3d.ImageComponent2D;
-import javax.media.j3d.Material;
+
+
 import javax.media.j3d.Shape3D;
-import javax.media.j3d.Texture2D;
-import javax.media.j3d.TextureAttributes;
+
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import util.ParserSTL;
 
+
+import view.MeshList;
 import view.TriangleMeshView;
 
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
-import com.sun.j3d.utils.image.TextureLoader;
+
 import com.sun.j3d.utils.picking.PickCanvas;
 import com.sun.j3d.utils.picking.PickTool;
 import com.sun.j3d.utils.universe.SimpleUniverse;
@@ -54,17 +55,27 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 
 	PickCanvas pickCanvas;
 	TriangleMeshView meshViewer;
+	
 	SimpleUniverse simpleUniverse;
 
+	MeshList meshList;
+	
+	
+	
+	
+	
 	public STLPickingTest() {
 		if (this.pickCanvas == null)
 			this.initJava3d();
-		ParserSTL parser = new ParserSTL("test1.stl");
-		try {
-			this.meshViewer = new TriangleMeshView(parser.read());/////////////////
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		ParserSTL parser = new ParserSTL("residential - 2.stl");
+//		ParserSTL parser1 = new ParserSTL("residential - 1.stl"); 
+//		try {
+//			this.meshViewer = new TriangleMeshView(parser.read());
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		this.meshList=new MeshList();
 	}
 
 	@Override
@@ -135,8 +146,10 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 
 		PickingEnvironment pick = new PickingEnvironment(c, objRoot);
 
+//		TransformGroup transformGroup = STLPickingTest.createTransformGroup(
+//				pick, this.meshViewer,this.meshViewer1);
 		TransformGroup transformGroup = STLPickingTest.createTransformGroup(
-				pick, this.meshViewer);
+				pick, this.meshList);
 
 		objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 		objRoot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -152,10 +165,15 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		objRoot.addChild(ambLight);
 
 		// Directional light
-		DirectionalLight headLight = new DirectionalLight(new Color3f(
+		DirectionalLight headLight1 = new DirectionalLight(new Color3f(
 				Color.white), new Vector3f(1.0f, -1.0f, -1.0f));
-		headLight.setInfluencingBounds(lightBounds);
-		objRoot.addChild(headLight);
+		headLight1.setInfluencingBounds(lightBounds);
+		objRoot.addChild(headLight1);
+
+		DirectionalLight headLight2 = new DirectionalLight(new Color3f(
+				Color.white), new Vector3f(-1.0f, -1.0f, -1.0f));
+		headLight2.setInfluencingBounds(lightBounds);
+		objRoot.addChild(headLight2);
 
 		objRoot.addChild(transformGroup);
 
@@ -164,13 +182,14 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		objRoot.addChild(test);
 
 		// Translates camera
-		this.translateCamera((float) this.meshViewer.getCentroid().getX(),
-				(float) this.meshViewer.getCentroid().getY(),
-				(float) this.meshViewer.getCentroid().getZ() + 20);
+		
+		this.translateCamera((float) this.meshList.getMeshList().get(0).getCentroid().getX(),
+				(float) this.meshList.getMeshList().get(0).getCentroid().getY(),
+				(float) this.meshList.getMeshList().get(0).getCentroid().getZ() + 20);
 		Point3d orientPoint = new Point3d();
-		orientPoint.setX(this.meshViewer.getCentroid().getX());
-		orientPoint.setY(this.meshViewer.getCentroid().getY());
-		orientPoint.setZ(this.meshViewer.getCentroid().getZ());
+		orientPoint.setX(this.meshList.getMeshList().get(0).getCentroid().getX());
+		orientPoint.setY(this.meshList.getMeshList().get(0).getCentroid().getY());
+		orientPoint.setZ(this.meshList.getMeshList().get(0).getCentroid().getZ());
 		pick.getMouseRotate().setCenter(orientPoint);
 
 		objRoot.compile();
@@ -179,7 +198,7 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 	}
 
 	private static TransformGroup createTransformGroup(PickingEnvironment pick,
-			TriangleMeshView meshViewer) {
+			MeshList meshList) {
 		BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0,
 				0.0, 0.0), 10000);
 
@@ -203,36 +222,47 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 		rotationGroup.addChild(translationGroup2);
 
 		// Appearance et texture
-		Material mat = new Material(new Color3f(0, 0, 0f),
-				new Color3f(0, 0, 0), new Color3f(Color.white), new Color3f(
-						Color.white), 64);
-		mat.setColorTarget(3);
+//		Material mat = new Material(new Color3f(0, 0, 0f),
+//				new Color3f(0, 0, 0), new Color3f(Color.white), new Color3f(
+//						Color.white), 64);
+//		mat.setColorTarget(3);
+//
+//		
+//		Appearance app = new Appearance();
+//
+//		app.setMaterial(mat);
 
-		Appearance app = new Appearance();
-
-		app.setMaterial(mat);
-
-		TextureLoader loader = new TextureLoader("texture.jpg", null);
-		ImageComponent2D image = loader.getImage();
-		Texture2D texture = new Texture2D(Texture2D.BASE_LEVEL, Texture2D.RGB,
-				image.getWidth(), image.getHeight());
-		texture.setImage(0, image);
-		app.setTexture(texture);
-		TextureAttributes texAtt = new TextureAttributes();
-		texAtt.setTextureMode(TextureAttributes.MODULATE);
-		app.setTextureAttributes(texAtt);
+		
+		
+//		TextureLoader loader = new TextureLoader("texture.jpg", null);
+//		ImageComponent2D image = loader.getImage();
+//		Texture2D texture = new Texture2D(Texture2D.BASE_LEVEL, Texture2D.RGB,
+//				image.getWidth(), image.getHeight());
+//		texture.setImage(0, image);
+//		//app.setTexture(texture);
+//		TextureAttributes texAtt = new TextureAttributes();
+//		texAtt.setTextureMode(TextureAttributes.MODULATE);
+//		//app.setTextureAttributes(texAtt);
 
 		// Test pour augmenter la capacit�d'affichage
 		BranchGroup sceneRoot = new BranchGroup();
 
 		translationGroup2.addChild(sceneRoot);
 
-		Shape3D shape = new Shape3D();
+//		Shape3D shape = new Shape3D();
+//
+//		//shape.addGeometry(meshViewer);
+//		for(TriangleArray triangleArray: meshList.getMeshList()){
+//			shape.addGeometry(triangleArray);
+//		}
+	    for(Shape3D shape: meshList.getShape3D()){
+	    	sceneRoot.addChild(shape);
+	    	
+	    }
 
-		shape.addGeometry(meshViewer);
-
-		sceneRoot.addChild(shape);
-		shape.setAppearance(app);
+		
+//		sceneRoot.addChild(shape);
+//		shape.setAppearance(app);
 
 		// Links the left button of the mouse with a rotation transformation
 		NewMouseRotate mouseRotate = new NewMouseRotate(translationGroup1,
@@ -243,12 +273,14 @@ public class STLPickingTest extends Java3dApplet implements MouseListener {
 
 		// Links the middle button of the mouse with a zoom transformation
 		MouseZoom mouseZoom = new MouseZoom();
+		mouseZoom.setFactor(2);
 		mouseZoom.setTransformGroup(transformGroup);
 		transformGroup.addChild(mouseZoom);
 		mouseZoom.setSchedulingBounds(boundingSphere);
 
 		// Links the right button of the mouse with a translation transformation
 		MouseTranslate mouseTranslate = new MouseTranslate();
+		mouseTranslate.setFactor(2);
 		mouseTranslate.setTransformGroup(transformGroup);
 		transformGroup.addChild(mouseTranslate);
 		mouseTranslate.setSchedulingBounds(boundingSphere);

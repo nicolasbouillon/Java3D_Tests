@@ -9,6 +9,7 @@ import javax.media.j3d.TriangleArray;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point2f;
 import javax.vecmath.Point3d;
+import javax.vecmath.TexCoord2f;
 import javax.vecmath.Vector3f;
 
 import model.Mesh;
@@ -21,6 +22,10 @@ public class TriangleMeshView extends TriangleArray {
 	private Point centroid;
 
 	private Mesh mesh;
+	
+	//
+	private boolean meshSelected;
+	//
 
 	public TriangleMeshView(Mesh m) {
 		super(m.size() * 3, GeometryArray.COORDINATES | GeometryArray.COLOR_3
@@ -28,6 +33,8 @@ public class TriangleMeshView extends TriangleArray {
 
 		this.mesh = m;
 		this.centroid = m.getCentroid();
+		
+		this.meshSelected=false;
 
 		this.trianglesViewList = new ArrayList<>();
 		int triangleCount=0;
@@ -47,6 +54,7 @@ public class TriangleMeshView extends TriangleArray {
 		for (TriangleView triangleView : this.trianglesViewList) {
 
 			triangleView.setSelected(false);
+			
 
 			
 			this.setCoordinate(i, new Point3d(triangleView.getTriangle()
@@ -68,6 +76,8 @@ public class TriangleMeshView extends TriangleArray {
 			this.setTextureCoordinate(i, new Point2f(0.0f, 1.0f));
 			this.setTextureCoordinate(i + 1, new Point2f(0.0f, 0.0f));
 			this.setTextureCoordinate(i + 2, new Point2f(1.0f, 0.0f));
+		
+
 //			Color3f color1=new Color3f(0,0,1);
 //			this.setColor(i,   color1);
 //			this.setColor(i+1, color1);
@@ -92,6 +102,14 @@ public class TriangleMeshView extends TriangleArray {
 //		this.setColor(i,   color1);
 //		this.setColor(i+1, color1);
 //		this.setColor(i+2, color1);
+	}
+	
+	public void unselect(int i){
+		this.trianglesViewList.get(i).setSelected(false);
+		
+		this.setTextureCoordinate(i * 3, new Point2f(0.0f, 1.0f));
+		this.setTextureCoordinate(i * 3 + 1, new Point2f(0.0f, 0.0f));
+		this.setTextureCoordinate(i * 3 + 2, new Point2f(1.0f, 0.0f));
 	}
 
 	public void selectOrUnselect(int i) {
@@ -152,5 +170,19 @@ public class TriangleMeshView extends TriangleArray {
 						.getZ());
 		return normalFloat;
 
+	}
+	
+	public void selectMesh(){
+		this.meshSelected=true;
+
+	}
+	
+	public void unselectMesh(){
+		this.meshSelected=false;
+
+	}
+	
+	public boolean getMeshSelectedOrNot(){
+		return this.meshSelected;
 	}
 }
